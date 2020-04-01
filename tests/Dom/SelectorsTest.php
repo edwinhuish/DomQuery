@@ -1,11 +1,12 @@
 <?php
 
-namespace Rct567\DomQuery\Tests;
+namespace Tests\Dom;
 
-use Rct567\DomQuery\DomQuery;
-use Rct567\DomQuery\CssToXpath;
+use DQ\Dom\DomQuery;
+use DQ\Dom\CssToXpath;
+use Tests\TestCaseBase;
 
-class DomQuerySelectorsTest extends \PHPUnit\Framework\TestCase
+class SelectorsTest extends TestCaseBase
 {
     /*
      * Test css to xpath conversion
@@ -13,55 +14,55 @@ class DomQuerySelectorsTest extends \PHPUnit\Framework\TestCase
     public function testCssToXpath()
     {
         $css_to_xpath = array(
-            'a' => '//a',
-            '*' => '//*',
-            '* > a' => '//*/a',
-            '#someid' => '//*[@id=\'someid\']',
-            'p#someid' => '//p[@id=\'someid\']',
-            '#some\\.id' => '//*[@id=\'some.id\']',
-            '#someid.s-class' => '//*[@id=\'someid\'][contains(concat(\' \', normalize-space(@class), \' \'), \' s-class \')]',
-            '#id[_]' => '//*[@id=\'id\'][@_]',
-            'p a' => '//p//a',
-            'div, span' => '//div|//span',
-            'a[href]' => '//a[@href]',
-            'a[href][rel]' => '//a[@href][@rel]',
-            'a[href="html"]' => '//a[@href=\'html\']',
-            'a[href!="html"]' => '//a[@href!=\'html\']',
-            'a[href*=\'html\']' => '//a[contains(@href, \'html\')]',
-            '[href*=\'html\']' => '//*[contains(@href, \'html\')]',
-            '[href^=\'html\']' => '//*[starts-with(@href, \'html\')]',
+            'a'                           => '//a',
+            '*'                           => '//*',
+            '* > a'                       => '//*/a',
+            '#someid'                     => '//*[@id=\'someid\']',
+            'p#someid'                    => '//p[@id=\'someid\']',
+            '#some\\.id'                  => '//*[@id=\'some.id\']',
+            '#someid.s-class'             => '//*[@id=\'someid\'][contains(concat(\' \', normalize-space(@class), \' \'), \' s-class \')]',
+            '#id[_]'                      => '//*[@id=\'id\'][@_]',
+            'p a'                         => '//p//a',
+            'div, span'                   => '//div|//span',
+            'a[href]'                     => '//a[@href]',
+            'a[href][rel]'                => '//a[@href][@rel]',
+            'a[href="html"]'              => '//a[@href=\'html\']',
+            'a[href!="html"]'             => '//a[@href!=\'html\']',
+            'a[href*=\'html\']'           => '//a[contains(@href, \'html\')]',
+            '[href*=\'html\']'            => '//*[contains(@href, \'html\')]',
+            '[href^=\'html\']'            => '//*[starts-with(@href, \'html\')]',
             'meta[http-equiv^="Content"]' => '//meta[starts-with(@http-equiv, \'Content\')]',
-            'meta[http-equiv^=Content]' => '//meta[starts-with(@http-equiv, \'Content\')]',
-            '[href$=\'html\']' => '//*[@href and substring(@href, string-length(@href)-3) = \'html\']',
-            '[href~=\'html\']' => '//*[contains(concat(\' \', normalize-space(@href), \' \'), \' html \')]',
-            '[href|=\'html\']' => '//*[@href=\'html\' or starts-with(@href, \'html-\')]',
-            '> a' => '/a',
-            'p > a' => '//p/a',
-            'p > a[href]' => '//p/a[@href]',
-            'p a[href]' => '//p//a[@href]',
-            ':disabled' => '//*[@disabled]',
-            'div :header' => '//div//*[self::h1 or self::h2 or self::h3 or self::h5 or self::h5 or self::h6]',
-            ':odd' => '//*[position() mod 2 = 0]',
-            '.h' => '//*[contains(concat(\' \', normalize-space(@class), \' \'), \' h \')]',
-            '.😾-_😾' => '//*[contains(concat(\' \', normalize-space(@class), \' \'), \' 😾-_😾 \')]',
-            '.hidden' => '//*[contains(concat(\' \', normalize-space(@class), \' \'), \' hidden \')]',
-            '.hidden-something' => '//*[contains(concat(\' \', normalize-space(@class), \' \'), \' hidden-something \')]',
-            'a.hidden[href]' => '//a[contains(concat(\' \', normalize-space(@class), \' \'), \' hidden \')][@href]',
-            'a[href] > .hidden' => '//a[@href]/*[contains(concat(\' \', normalize-space(@class), \' \'), \' hidden \')]',
-            'a:not(b[co-ol])' => '//a[not(self::b[@co-ol])]',
-            'a:not(b,c)' => '//a[not(self::b or self::c)]',
-            'a:not(.cool)' => '//a[not(self::*[contains(concat(\' \', normalize-space(@class), \' \'), \' cool \')])]',
-            'a:contains(txt)' => '//a[text()[contains(.,\'txt\')]]',
-            'h1 ~ ul' => '//h1/following-sibling::ul',
-            'h1 + ul' => '//h1/following-sibling::ul[preceding-sibling::*[1][self::h1]]',
-            'h1 ~ #id' => '//h1/following-sibling::*[@id=\'id\']',
-            'p > a:has(> a)' => '//p/a[child::a]',
-            'p > a:has(b > a)' => '//p/a[descendant::b/a]',
-            'p > a:has(a)' => '//p/a[descendant::a]',
-            'a:has(b)' => '//a[descendant::b]',
-            'a:first-child:first' => '(//a[not(preceding-sibling::*)])[1]',
-            'div > a:first' => '(//div/a)[1]',
-            ':first' => '(//*)[1]'
+            'meta[http-equiv^=Content]'   => '//meta[starts-with(@http-equiv, \'Content\')]',
+            '[href$=\'html\']'            => '//*[@href and substring(@href, string-length(@href)-3) = \'html\']',
+            '[href~=\'html\']'            => '//*[contains(concat(\' \', normalize-space(@href), \' \'), \' html \')]',
+            '[href|=\'html\']'            => '//*[@href=\'html\' or starts-with(@href, \'html-\')]',
+            '> a'                         => '/a',
+            'p > a'                       => '//p/a',
+            'p > a[href]'                 => '//p/a[@href]',
+            'p a[href]'                   => '//p//a[@href]',
+            ':disabled'                   => '//*[@disabled]',
+            'div :header'                 => '//div//*[self::h1 or self::h2 or self::h3 or self::h5 or self::h5 or self::h6]',
+            ':odd'                        => '//*[position() mod 2 = 0]',
+            '.h'                          => '//*[contains(concat(\' \', normalize-space(@class), \' \'), \' h \')]',
+            '.😾-_😾'                     => '//*[contains(concat(\' \', normalize-space(@class), \' \'), \' 😾-_😾 \')]',
+            '.hidden'                     => '//*[contains(concat(\' \', normalize-space(@class), \' \'), \' hidden \')]',
+            '.hidden-something'           => '//*[contains(concat(\' \', normalize-space(@class), \' \'), \' hidden-something \')]',
+            'a.hidden[href]'              => '//a[contains(concat(\' \', normalize-space(@class), \' \'), \' hidden \')][@href]',
+            'a[href] > .hidden'           => '//a[@href]/*[contains(concat(\' \', normalize-space(@class), \' \'), \' hidden \')]',
+            'a:not(b[co-ol])'             => '//a[not(self::b[@co-ol])]',
+            'a:not(b,c)'                  => '//a[not(self::b or self::c)]',
+            'a:not(.cool)'                => '//a[not(self::*[contains(concat(\' \', normalize-space(@class), \' \'), \' cool \')])]',
+            'a:contains(txt)'             => '//a[text()[contains(.,\'txt\')]]',
+            'h1 ~ ul'                     => '//h1/following-sibling::ul',
+            'h1 + ul'                     => '//h1/following-sibling::ul[preceding-sibling::*[1][self::h1]]',
+            'h1 ~ #id'                    => '//h1/following-sibling::*[@id=\'id\']',
+            'p > a:has(> a)'              => '//p/a[child::a]',
+            'p > a:has(b > a)'            => '//p/a[descendant::b/a]',
+            'p > a:has(a)'                => '//p/a[descendant::a]',
+            'a:has(b)'                    => '//a[descendant::b]',
+            'a:first-child:first'         => '(//a[not(preceding-sibling::*)])[1]',
+            'div > a:first'               => '(//div/a)[1]',
+            ':first'                      => '(//*)[1]'
         );
 
         foreach ($css_to_xpath as $css => $expected_xpath) {
@@ -84,19 +85,19 @@ class DomQuerySelectorsTest extends \PHPUnit\Framework\TestCase
     public function testElementTagnameSelectorWithXml()
     {
         $dom = new DomQuery('<?xml version="1.0" encoding="UTF-8"?><root>'
-        .'<link>Hi</link><b:link>Hi2</b:link></root>');
+            .'<link>Hi</link><b:link>Hi2</b:link></root>');
         $this->assertEquals('Hi', $dom->find('link')->text());
         $this->assertEquals(1, $dom->find('link')->length);
     }
 
-     /*
-     * Test select by tagname selector with xml name space
-     */
+    /*
+    * Test select by tagname selector with xml name space
+    */
     public function testElementTagnameSelectorWithXmlNameSpace()
     {
         $dom = new DomQuery('<?xml version="1.0" encoding="UTF-8"?>'
-        .'<root xmlns:h="http://www.w3.org/TR/html4/" xmlns:f="https://www.w3schools.com/furniture">'
-        .'<f:link>Hi</f:link><b:link>Hi2</b:link><h:link>Hi3</h:link></root>');
+            .'<root xmlns:h="http://www.w3.org/TR/html4/" xmlns:f="https://www.w3schools.com/furniture">'
+            .'<f:link>Hi</f:link><b:link>Hi2</b:link><h:link>Hi3</h:link></root>');
         $this->assertEquals('Hi', $dom->find('f\\:link')->text());
         $this->assertEquals(1, $dom->find('f\\:link')->length);
         $this->assertEquals('Hi3', $dom->find('h\\:link')->text());

@@ -1,10 +1,11 @@
 <?php
 
-namespace Rct567\DomQuery\Tests;
+namespace Tests\Dom;
 
-use Rct567\DomQuery\DomQuery;
+use DQ\Dom\DomQuery;
+use Tests\TestCaseBase;
 
-class DomQueryTraversingFilterTest extends \PHPUnit\Framework\TestCase
+class TraversingFilterTest extends TestCaseBase
 {
     /*
      * Test is
@@ -39,7 +40,7 @@ class DomQueryTraversingFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilter()
     {
-        $dom = new DomQuery('<a>hai</a> <a></a> <a id="mmm"></a> <a class="x"></a> <a class="xpp"></a>');
+        $dom       = new DomQuery('<a>hai</a> <a></a> <a id="mmm"></a> <a class="x"></a> <a class="xpp"></a>');
         $selection = $dom->find('a');
         $this->assertEquals(5, $selection->length);
         $this->assertEquals(5, $selection->filter('a')->length);
@@ -59,7 +60,7 @@ class DomQueryTraversingFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testNot()
     {
-        $dom = new DomQuery('<a>hai</a> <a></a> <a id="mmm"></a> <a class="x"></a> <a class="xpp"></a>');
+        $dom       = new DomQuery('<a>hai</a> <a></a> <a id="mmm"></a> <a class="x"></a> <a class="xpp"></a>');
         $selection = $dom->find('a');
         $this->assertEquals(5, $selection->length);
         $this->assertEquals(5, $selection->not('p')->length);
@@ -81,7 +82,7 @@ class DomQueryTraversingFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFirstLast()
     {
-        $dom = new DomQuery('<a>1</a> <a>2</a> <a>3</a>');
+        $dom   = new DomQuery('<a>1</a> <a>2</a> <a>3</a>');
         $links = $dom->children('a');
 
         $this->assertEquals(3, $links->length);

@@ -1,10 +1,11 @@
 <?php
 
-namespace Rct567\DomQuery\Tests;
+namespace Tests\Dom;
 
-use Rct567\DomQuery\DomQuery;
+use DQ\Dom\DomQuery;
+use Tests\TestCaseBase;
 
-class DomQueryTest extends \PHPUnit\Framework\TestCase
+class BaseTest extends TestCaseBase
 {
     /*
      * Test filters, first and last (with method and pseudo selector)
@@ -94,7 +95,7 @@ class DomQueryTest extends \PHPUnit\Framework\TestCase
     public function testLoadingUf8AndGettingSameContent()
     {
         $html = '<div><h1>Iñtërnâtiônàlizætiøn</h1></div><a>k</a>';
-        $dom = new DomQuery($html);
+        $dom  = new DomQuery($html);
 
         $this->assertEquals($html, (string) $dom); // same result
         $this->assertEquals('<h1>Iñtërnâtiônàlizætiøn</h1>', (string) $dom->find('h1')); // same header
@@ -226,7 +227,7 @@ class DomQueryTest extends \PHPUnit\Framework\TestCase
      */
     public function testChangeAttributeWithoutValueInXmlWriteMode()
     {
-        $dom = new DomQuery('<div selected>a</div>');
+        $dom           = new DomQuery('<div selected>a</div>');
         $dom->xml_mode = true;
         $this->assertEquals("<div selected=\"selected\">a</div>", (string) $dom);
     }
@@ -352,7 +353,7 @@ class DomQueryTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\Exception::class);
         $empty_node_list = (new \DOMDocument())->getElementsByTagName('nope');
-        $dom = new DomQuery($empty_node_list);
+        $dom             = new DomQuery($empty_node_list);
     }
 
     /*
@@ -370,7 +371,7 @@ class DomQueryTest extends \PHPUnit\Framework\TestCase
     public function testArrayAccessSet()
     {
         $this->expectException(\BadMethodCallException::class);
-        $dom = new DomQuery();
+        $dom            = new DomQuery();
         $dom['invalid'] = null;
     }
 

@@ -1,10 +1,11 @@
 <?php
 
-namespace Rct567\DomQuery\Tests;
+namespace Tests\Dom;
 
-use Rct567\DomQuery\DomQuery;
+use DQ\Dom\DomQuery;
+use Tests\TestCaseBase;
 
-class DomQueryManipulationTest extends \PHPUnit\Framework\TestCase
+class ManipulationTest extends TestCaseBase
 {
 
     /*
@@ -14,13 +15,13 @@ class DomQueryManipulationTest extends \PHPUnit\Framework\TestCase
     {
         $dom = DomQuery::create('<html><div class="container">'.
             '<div class="inner">Hello</div> <div class="inner">Goodbye</div>'.
-        '</div></html>');
+            '</div></html>');
 
         $dom->find('.inner')->wrapAll('<div class="new" />');
 
         $this->assertEquals('<html><div class="container">'.
             '<div class="new"><div class="inner">Hello</div><div class="inner">Goodbye</div></div>'.
-        ' </div></html>', (string) $dom);
+            ' </div></html>', (string) $dom);
     }
 
     /*
@@ -30,13 +31,13 @@ class DomQueryManipulationTest extends \PHPUnit\Framework\TestCase
     {
         $dom = DomQuery::create('<html><div class="container">'.
             '<div class="inner">Hello</div> <div class="nope">Goodbye</div>'.
-        '</div></html>');
+            '</div></html>');
 
         $dom->find('.inner')->wrapAll('<div class="new" />');
 
         $this->assertEquals('<html><div class="container">'.
             '<div class="new"><div class="inner">Hello</div></div> <div class="nope">Goodbye</div>'.
-        '</div></html>', (string) $dom);
+            '</div></html>', (string) $dom);
     }
 
     /*
@@ -46,13 +47,13 @@ class DomQueryManipulationTest extends \PHPUnit\Framework\TestCase
     {
         $dom = DomQuery::create('<html><div class="container">'.
             '<div class="inner">Hello</div> <div class="inner">Goodbye</div>'.
-        '</div></html>');
+            '</div></html>');
 
         $dom->find('.inner')->wrapAll('<div class="new"><x></x></div>');
 
         $this->assertEquals('<html><div class="container">'.
             '<div class="new"><x><div class="inner">Hello</div><div class="inner">Goodbye</div></x></div>'.
-        ' </div></html>', (string) $dom);
+            ' </div></html>', (string) $dom);
     }
 
     /*
@@ -115,9 +116,9 @@ class DomQueryManipulationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("<div><span>C</span></div>", (string) $dom);
     }
 
-     /*
-     * Test remove with selector filter
-     */
+    /*
+    * Test remove with selector filter
+    */
     public function testRemoveWithSelectorFilter()
     {
         $dom = DomQuery::create('<div><a title="hello">Some text</a><a>B</a><span>C</span></div>');
@@ -276,7 +277,7 @@ class DomQueryManipulationTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetHtmlInXmlMode()
     {
-        $dom = new DomQuery('<p> <a>M<i selected>A</i></a> <span></span> </p>');
+        $dom           = new DomQuery('<p> <a>M<i selected>A</i></a> <span></span> </p>');
         $dom->xml_mode = true;
         $this->assertEquals('M<i selected="selected">A</i>', $dom->find('a')->html()); // inner
         $this->assertEquals('<a>M<i selected="selected">A</i></a>', $dom->find('a')->prop('outerHTML')); // outer
@@ -360,7 +361,7 @@ class DomQueryManipulationTest extends \PHPUnit\Framework\TestCase
      */
     public function testReplaceWith()
     {
-        $dom = new DomQuery('<div> <a class="a"></a> <a class="b"></a> <a class="c"></a> </div>');
+        $dom     = new DomQuery('<div> <a class="a"></a> <a class="b"></a> <a class="c"></a> </div>');
         $removed = $dom->find('.b')->replaceWith('<h2>Hello</h2>');
         $this->assertEquals('<a class="b"></a>', (string) $removed);
         $this->assertEquals('<div> <a class="a"></a> <h2>Hello</h2> <a class="c"></a> </div>', (string) $dom);
@@ -371,7 +372,7 @@ class DomQueryManipulationTest extends \PHPUnit\Framework\TestCase
      */
     public function testReplaceWithSelection()
     {
-        $dom = new DomQuery('<div> <a class="a"></a> <a class="b"></a> <a class="c"></a> </div>');
+        $dom     = new DomQuery('<div> <a class="a"></a> <a class="b"></a> <a class="c"></a> </div>');
         $removed = $dom->find('.c')->replaceWith($dom->find('.a'));
         $this->assertEquals('<a class="c"></a>', (string) $removed);
         $this->assertEquals('<div>  <a class="b"></a> <a class="a"></a> </div>', (string) $dom);

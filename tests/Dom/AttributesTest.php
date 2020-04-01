@@ -1,10 +1,11 @@
 <?php
 
-namespace Rct567\DomQuery\Tests;
+namespace Tests\Dom;
 
-use Rct567\DomQuery\DomQuery;
+use DQ\Dom\DomQuery;
+use Tests\TestCaseBase;
 
-class DomQueryAttributesTest extends \PHPUnit\Framework\TestCase
+class AttributesTest extends TestCaseBase
 {
     /*
      * Test get attribute value

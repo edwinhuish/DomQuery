@@ -1,6 +1,6 @@
 <?php
 
-namespace Rct567\DomQuery;
+namespace DQ\Dom;
 
 /**
  * Class CssToXpath
@@ -18,7 +18,7 @@ class CssToXpath
     /**
      * Transform CSS selector expression to XPath
      *
-     * @param string $path css selector expression
+     * @param  string  $path  css selector expression
      *
      * @return string xpath expression
      */
@@ -30,12 +30,12 @@ class CssToXpath
 
         $tmp_path = self::replaceCharInsideEnclosure($path, ',');
         if (strpos($tmp_path, ',') !== false) {
-            $paths = explode(',', $tmp_path);
+            $paths       = explode(',', $tmp_path);
             $expressions = array();
 
             foreach ($paths as $single_path) {
-                $single_path = str_replace("\0", ',', $single_path); // restore commas
-                $xpath = self::transform(trim($single_path));
+                $single_path   = str_replace("\0", ',', $single_path); // restore commas
+                $xpath         = self::transform(trim($single_path));
                 $expressions[] = $xpath;
             }
 
@@ -76,14 +76,14 @@ class CssToXpath
     /**
      * Replace char with null bytes inside (optionally specified) enclosure
      *
-     * @param string $str
-     * @param string $search_char
-     * @param string $enclosure_open
-     * @param string $enclosure_close
+     * @param  string  $str
+     * @param  string  $search_char
+     * @param  string  $enclosure_open
+     * @param  string  $enclosure_close
      *
      * @return string $str
      */
-    private static function replaceCharInsideEnclosure($str, $search_char, $enclosure_open='(', $enclosure_close=')')
+    private static function replaceCharInsideEnclosure($str, $search_char, $enclosure_open = '(', $enclosure_close = ')')
     {
         if ($str === '' || strpos($str, $search_char) === false || strpos($str, $enclosure_open) === false) {
             return $str;
@@ -105,9 +105,9 @@ class CssToXpath
     /**
      * Get segment data from token (css selector delimited by space and commas)
      *
-     * @param string $token
-     * @param integer $key
-     * @param string[] $tokens
+     * @param  string  $token
+     * @param  integer  $key
+     * @param  string[]  $tokens
      *
      * @return object|false $segment
      */
@@ -120,14 +120,14 @@ class CssToXpath
         }
 
         $segment = (object) array(
-            'selector' => '',
-            'relation_token' => false,
+            'selector'          => '',
+            'relation_token'    => false,
             'attribute_filters' => array(),
-            'pseudo_filters' => array()
+            'pseudo_filters'    => array()
         );
 
-        if (isset($tokens[$key-1]) && \in_array($tokens[$key-1], $relation_tokens, true)) { // get relationship token
-            $segment->relation_token = $tokens[$key-1];
+        if (isset($tokens[$key - 1]) && \in_array($tokens[$key - 1], $relation_tokens, true)) { // get relationship token
+            $segment->relation_token = $tokens[$key - 1];
         }
 
         if (ctype_alpha($token)) { // simple element selector
@@ -137,10 +137,10 @@ class CssToXpath
 
         $char_tmp_replaced = false;
         if (strpos($token, '\\') !== false) {
-            $token = preg_replace_callback( // temporary replace escaped characters
+            $token             = preg_replace_callback( // temporary replace escaped characters
                 '#(\\\\)(.{1})#',
                 function ($matches) {
-                    return 'ESCAPED'. \ord($matches[2]);
+                    return 'ESCAPED'.\ord($matches[2]);
                 },
                 $token
             );
@@ -150,27 +150,27 @@ class CssToXpath
         $segment->selector = $token;
 
         while (preg_match('/(.*)\:(not|contains|has)\((.+)\)$/i', $segment->selector, $matches)) { // pseudo selector
-            $segment->selector = $matches[1];
+            $segment->selector         = $matches[1];
             $segment->pseudo_filters[] = $matches[2].'('.$matches[3].')';
         }
 
         while (preg_match('/(.*)\:([a-z][a-z\-]+)$/i', $segment->selector, $matches)) { // pseudo selector
-            $segment->selector = $matches[1];
+            $segment->selector         = $matches[1];
             $segment->pseudo_filters[] = $matches[2];
         }
 
         while (preg_match('/(.*)\[([^]]+)\]$/', $segment->selector, $matches)) { // attribute selector
-            $segment->selector = $matches[1];
+            $segment->selector            = $matches[1];
             $segment->attribute_filters[] = $matches[2];
         }
 
         while (preg_match('/(.*)\.([^\.\#]+)$/i', $segment->selector, $matches)) { // class selector
-            $segment->selector = $matches[1];
+            $segment->selector            = $matches[1];
             $segment->attribute_filters[] = 'class~="'.$matches[2].'"';
         }
 
         while (preg_match('/(.*)\#([^\.\#]+)$/i', $segment->selector, $matches)) { // id selector
-            $segment->selector = $matches[1];
+            $segment->selector            = $matches[1];
             $segment->attribute_filters[] = 'id="'.$matches[2].'"';
         }
 
@@ -198,7 +198,7 @@ class CssToXpath
     /**
      * Transform css segments to xpath
      *
-     * @param object[] $segments
+     * @param  object[]  $segments
      *
      * @return string[] $new_path_tokens
      */
@@ -221,8 +221,8 @@ class CssToXpath
                 $new_path_tokens[] = '*'; // any tagname
             }
 
-            if ($segment->relation_token === '+' && isset($segments[$num-1])) { // add adjacent filter
-                $prev_selector = implode('', self::transformCssSegments([$segments[$num-1]]));
+            if ($segment->relation_token === '+' && isset($segments[$num - 1])) { // add adjacent filter
+                $prev_selector     = implode('', self::transformCssSegments([$segments[$num - 1]]));
                 $new_path_tokens[] = '[preceding-sibling::*[1][self::'.ltrim($prev_selector, '/').']]';
             }
 
@@ -241,8 +241,8 @@ class CssToXpath
     /**
      * Transform 'css pseudo selector' expression to xpath expression
      *
-     * @param string $expression
-     * @param string[] $new_path_tokens
+     * @param  string  $expression
+     * @param  string[]  $new_path_tokens
      *
      * @return string transformed expression (xpath)
      * @throws \Exception
@@ -261,9 +261,9 @@ class CssToXpath
             return '[text()[contains(.,\''.$matches[1].'\')]]'; // contain the specified text
         } elseif (preg_match('|has\((.+)\)|i', $expression, $matches)) {
             if (strpos($matches[1], '> ') === 0) {
-                return '[child::' . ltrim(self::transform($matches[1]), '/') .']';
+                return '[child::'.ltrim(self::transform($matches[1]), '/').']';
             } else {
-                return '[descendant::' . ltrim(self::transform($matches[1]), '/') .']';
+                return '[descendant::'.ltrim(self::transform($matches[1]), '/').']';
             }
         } elseif ($expression === 'first' || $expression === 'last') { // new path inside selection
             array_unshift($new_path_tokens, '(');
@@ -273,22 +273,22 @@ class CssToXpath
         //  static replacement
 
         $pseudo_class_selectors = array(
-            'disabled' => '[@disabled]',
+            'disabled'    => '[@disabled]',
             'first-child' => '[not(preceding-sibling::*)]',
-            'last-child' => '[not(following-sibling::*)]',
-            'only-child' => '[not(preceding-sibling::*) and not(following-sibling::*)]',
-            'empty' => '[count(*) = 0 and string-length() = 0]',
-            'not-empty' => '[count(*) > 0 or string-length() > 0]',
-            'parent' => '[count(*) > 0]',
-            'header' => '[self::h1 or self::h2 or self::h3 or self::h5 or self::h5 or self::h6]',
-            'odd' => '[position() mod 2 = 0]',
-            'even' => '[position() mod 2 = 1]',
-            'first' => '[1]',
-            'last' => '[last()]',
-            'root' => '[not(parent::*)]'
+            'last-child'  => '[not(following-sibling::*)]',
+            'only-child'  => '[not(preceding-sibling::*) and not(following-sibling::*)]',
+            'empty'       => '[count(*) = 0 and string-length() = 0]',
+            'not-empty'   => '[count(*) > 0 or string-length() > 0]',
+            'parent'      => '[count(*) > 0]',
+            'header'      => '[self::h1 or self::h2 or self::h3 or self::h5 or self::h5 or self::h6]',
+            'odd'         => '[position() mod 2 = 0]',
+            'even'        => '[position() mod 2 = 1]',
+            'first'       => '[1]',
+            'last'        => '[last()]',
+            'root'        => '[not(parent::*)]'
         );
 
-        if (!isset($pseudo_class_selectors[$expression])) {
+        if ( ! isset($pseudo_class_selectors[$expression])) {
             throw new \Exception('Pseudo class '.$expression.' unknown');
         }
 
@@ -298,32 +298,32 @@ class CssToXpath
     /**
      * Transform 'css attribute selector' expression to xpath expression
      *
-     * @param string $expression
+     * @param  string  $expression
      *
      * @return string transformed expression (xpath)
      */
     private static function transformAttrSelector($expression)
     {
         if (preg_match('|^([a-z0-9_]{1}[a-z0-9_-]*)(([\!\*\^\$\~\|]{0,1})=)?'.
-        '(?:[\'"]*)?([^\'"]+)?(?:[\'"]*)?$|i', $expression, $matches)) {
-            if (!isset($matches[3])) { // attribute without value
-                return "[@" . $matches[1] . "]";
+            '(?:[\'"]*)?([^\'"]+)?(?:[\'"]*)?$|i', $expression, $matches)) {
+            if ( ! isset($matches[3])) { // attribute without value
+                return "[@".$matches[1]."]";
             } elseif ($matches[3] === '') { // arbitrary attribute strict value equality
-                return '[@' . strtolower($matches[1]) . "='" . $matches[4] . "']";
+                return '[@'.strtolower($matches[1])."='".$matches[4]."']";
             } elseif ($matches[3] === '!') { // arbitrary attribute negation strict value
-                return '[@' . strtolower($matches[1]) . "!='" . $matches[4] . "']";
+                return '[@'.strtolower($matches[1])."!='".$matches[4]."']";
             } elseif ($matches[3] === '~') { // arbitrary attribute value contains full word
-                return "[contains(concat(' ', normalize-space(@" . strtolower($matches[1]) . "), ' '), ' ". $matches[4] . " ')]";
+                return "[contains(concat(' ', normalize-space(@".strtolower($matches[1])."), ' '), ' ".$matches[4]." ')]";
             } elseif ($matches[3] === '*') {  // arbitrary attribute value contains specified content
-                return "[contains(@" . strtolower($matches[1]) . ", '" . $matches[4] . "')]";
+                return "[contains(@".strtolower($matches[1]).", '".$matches[4]."')]";
             } elseif ($matches[3] === '^') { // attribute value starts with specified content
-                return "[starts-with(@" . strtolower($matches[1]) . ", '" . $matches[4] . "')]";
+                return "[starts-with(@".strtolower($matches[1]).", '".$matches[4]."')]";
             } elseif ($matches[3] === '$') { // attribute value ends with specified content
                 return "[@".$matches[1]." and substring(@".$matches[1].", string-length(@".$matches[1].")-".
-                (\strlen($matches[4])-1).") = '".$matches[4]."']";
+                    (\strlen($matches[4]) - 1).") = '".$matches[4]."']";
             } elseif ($matches[3] === '|') { // attribute has prefix selector
-                return '[@' . strtolower($matches[1]) . "='" . $matches[4] . "' or starts-with(@".
-                strtolower($matches[1]) . ", '" . $matches[4].'-' . "')]";
+                return '[@'.strtolower($matches[1])."='".$matches[4]."' or starts-with(@".
+                    strtolower($matches[1]).", '".$matches[4].'-'."')]";
             }
         }
 

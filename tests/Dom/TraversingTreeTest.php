@@ -1,10 +1,11 @@
 <?php
 
-namespace Rct567\DomQuery\Tests;
+namespace Tests\Dom;
 
-use Rct567\DomQuery\DomQuery;
+use DQ\Dom\DomQuery;
+use Tests\TestCaseBase;
 
-class DomQueryTraversingTreeTest extends \PHPUnit\Framework\TestCase
+class TraversingTreeTest extends TestCaseBase
 {
     /*
      * Test find
@@ -97,7 +98,7 @@ class DomQueryTraversingTreeTest extends \PHPUnit\Framework\TestCase
      */
     public function testSiblings()
     {
-        $dom = new DomQuery('<div><a>1</a> <a id="target">2</a> <a>3</a></div>');
+        $dom      = new DomQuery('<div><a>1</a> <a id="target">2</a> <a>3</a></div>');
         $siblings = $dom->find('#target')->siblings();
 
         $this->assertEquals(2, $siblings->length);
@@ -110,7 +111,7 @@ class DomQueryTraversingTreeTest extends \PHPUnit\Framework\TestCase
      */
     public function testChildren()
     {
-        $dom = new DomQuery('<div><a>1</a> <a>2</a> <a>3</a></div>');
+        $dom      = new DomQuery('<div><a>1</a> <a>2</a> <a>3</a></div>');
         $children = $dom->find('div')->children();
 
         $this->assertEquals(3, $children->length);
@@ -123,7 +124,7 @@ class DomQueryTraversingTreeTest extends \PHPUnit\Framework\TestCase
      */
     public function testContents()
     {
-        $dom = new DomQuery('<div> <a>1</a> <a>2</a> <a>3</a> </div>');
+        $dom      = new DomQuery('<div> <a>1</a> <a>2</a> <a>3</a> </div>');
         $children = $dom->find('div')->contents();
 
         $this->assertEquals(7, $children->length); // 3 elements plus 4 spaces
@@ -164,7 +165,7 @@ class DomQueryTraversingTreeTest extends \PHPUnit\Framework\TestCase
      */
     public function testTraversingNodesReadmeExamples()
     {
-        $dom = new DomQuery('<a>1</a> <a>2</a> <a>3</a>');
+        $dom   = new DomQuery('<a>1</a> <a>2</a> <a>3</a>');
         $links = $dom->children('a');
 
         $result = '';

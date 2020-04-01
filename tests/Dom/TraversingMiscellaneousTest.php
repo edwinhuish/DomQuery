@@ -1,10 +1,11 @@
 <?php
 
-namespace Rct567\DomQuery\Tests;
+namespace Tests\Dom;
 
-use Rct567\DomQuery\DomQuery;
+use DQ\Dom\DomQuery;
+use Tests\TestCaseBase;
 
-class DomQueryTraversingMiscellaneousTest extends \PHPUnit\Framework\TestCase
+class TraversingMiscellaneousTest extends TestCaseBase
 {
     /*
      * Test add using selector
@@ -21,7 +22,7 @@ class DomQueryTraversingMiscellaneousTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddWithHtml()
     {
-        $dom = new DomQuery('<a>1</a>');
+        $dom     = new DomQuery('<a>1</a>');
         $new_dom = $dom->find('a')->add('<span>2</span>');
         $this->assertEquals('<a>1</a>', (string) $dom);
         $this->assertEquals('<a>1</a><span>2</span>', (string) $new_dom);
@@ -32,7 +33,7 @@ class DomQueryTraversingMiscellaneousTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddWithHtmlContext()
     {
-        $dom = new DomQuery('<a>1</a><p>nope</p>');
+        $dom     = new DomQuery('<a>1</a><p>nope</p>');
         $new_dom = $dom->find('a')->add('span', '<span>2</span><p>nope</p>');
         $this->assertEquals('<a>1</a><p>nope</p>', (string) $dom);
         $this->assertEquals('<a>1</a><span>2</span>', (string) $new_dom);
