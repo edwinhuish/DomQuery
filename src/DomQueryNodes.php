@@ -425,7 +425,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         };
 
         return preg_replace_callback(
-            "|(:eq)\((-?[1-9]\d*)\)|",
+            "|(:eq)\((-?[0-9]\d*)\)|",
             $callback,
             $selector);
     }
