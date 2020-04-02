@@ -1,4 +1,6 @@
-# DomQuery
+# DomQuery 
+
+[English](README.md) | [中文说明](REDME-ZH.md)
 
 DomQuery is a PHP library that allows you to easily traverse and modify the DOM (HTML/XML). As a library it aims to
 provide 'jQuery like' access to the PHP DOMDocument class (http://php.net/manual/en/book.dom.php).
@@ -8,7 +10,7 @@ provide 'jQuery like' access to the PHP DOMDocument class (http://php.net/manual
 Install the latest version with
 
 ```bash
-$ composer require rct567/dom-query
+$ composer require edwinhuish/domquery
 ```
 
 ## Basic Usage
@@ -35,10 +37,30 @@ echo count($dom->find('div, h1')); // output: 2
 $dom = new DomQuery('<a>1</a> <a>2</a> <a>3</a>');
 $links = $dom->children('a');
 
-foreach($links as $elm) {
-    echo $elm->text(); // output 123
+// foreach
+$texts = [];
+foreach($links as $key => $dq) { // $dq is DomQuery object
+    $texts[] = $dq->text();
 }
+print_r($texts); // array('1','2','3')
 
+// map 
+$result = $links->map(function(DomQuery $dq, int $idx){
+    return $dq->text();
+});
+// map method return Collection object
+print_r($result->toArray()); // array('1','2','3')
+
+// each, same as Collection's each method, break traversing if return false.
+$links->each(function(DomQuery $dq, int $idx){
+    if($idx === 1){
+        return false;
+    }
+    $dq->text('changed');
+});
+print_r($links->texts()); // array('changed', '2', '3')
+
+echo $links->text(); // output 1, return text of first child, if you need the result of all childs please use texts() or foreach, each, map method
 echo $links[0]->text(); // output 1
 echo $links->last()->text(); // output 3
 echo $links->first()->next()->text(); // output 2
@@ -187,10 +209,6 @@ $dom->find('namespace\\:h1')->text();
 - Works with PHP 7.0 or above
 - Requires libxml PHP extension (enabled by default)
 
-### Inspiration/acknowledgements
+### Fork by
 
-- https://github.com/wasinger/htmlpagedom
-- https://github.com/symfony/dom-crawler
-- https://github.com/ARTACK/DOMQuery
-- https://github.com/zendframework/zend-dom
-- http://simplehtmldom.sourceforge.net
+- https://github.com/Rct567/DomQuery
