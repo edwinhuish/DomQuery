@@ -191,7 +191,7 @@ DomQuery::create('<a title="hello"></a>')->attr('title') // hello
 ## XML 支持
 
 - 如果找到 [XML 声明](https://wiki.jikexueyuan.com/project/xml/declaration.html)，XML 内容会自动加载为 [XML](http://php.net/manual/zh/domdocument.loadxml.php) （属性 `xml_mode` 将会设置为 `true` ）
-- 同时会使保存（渲染）如 [XML](http://php.net/manual/zh/domdocument.savexml.php)'。您可以将 `xml_mode` 设为 `false` 来避免这个状况。
+- 同时会使保存（渲染）如 [XML](http://php.net/manual/zh/domdocument.savexml.php)。您可以将 `xml_mode` 设为 `false` 来避免这个状况。
 - 为防止插入 `XML` 声明的内容，您可以将 `xml_mode` 设为 `false`，再用 `loadContent($content)` 函数进行加载。
 - Namespaces 会自动注册。 （无须[手动注册](http://php.net/manual/zh/domxpath.registernamespace.php)）
 
