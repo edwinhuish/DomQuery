@@ -2,7 +2,7 @@
 
 namespace DQ;
 
-use DQ\Helpers\CssToXpath;
+use Edwinhuish\CssToXpath\CssToXpath;
 use Tightenco\Collect\Support\Collection;
 
 /**
@@ -387,6 +387,8 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
             $css_expression = implode(',', $selector_tag_names);
         }
 
+        $css_expression = $this->replaceEqToNthChild($css_expression);
+
         $xpath_expression = CssToXpath::transform($css_expression);
         $result           = $this->xpath($xpath_expression);
 
@@ -408,6 +410,24 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         }
 
         return $result;
+    }
+
+    protected function replaceEqToNthChild(string $selector)
+    {
+        $callback = function ($matches) {
+            $idx = $matches[2] * 1;
+
+            if ($matches[2] >= 0) {
+                $idx = $idx + 1;
+            }
+
+            return ':nth-child('.$idx.')';
+        };
+
+        return preg_replace_callback(
+            "|(:eq)\((-?[1-9]\d*)\)|",
+            $callback,
+            $selector);
     }
 
     /**

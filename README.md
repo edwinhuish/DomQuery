@@ -181,6 +181,16 @@ DomQuery::create('<a title="hello"></a>')->attr('title') // hello
 - `:has(foo)` elements containing at least one element that matches foo selector
 - `:contains(foo)` elements that contain text foo
 - `:root` element that is the root of the document
+- `:nth-child(n)`
+- `:nth-child(even)`
+- `:nth-child(odd)`
+- `:nth-child(3n+8)`
+- `:nth-child(2n+1)`
+- `:nth-child(3)`
+- `:nth-child(-2)`
+- `:nth-child(4n)`
+- `:eq(0)`
+- `:eq(-1)`
 
 ## Other (non jQuery) methods
 

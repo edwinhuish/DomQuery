@@ -180,6 +180,16 @@ DomQuery::create('<a title="hello"></a>')->attr('title') // hello
 - `:has(foo)` 至少有一个子节点匹配 foo selector 的节点
 - `:contains(foo)` 含有 foo text 的节点
 - `:root` 文档的根元素。
+- `:nth-child(n)`
+- `:nth-child(even)`
+- `:nth-child(odd)`
+- `:nth-child(3n+8)`
+- `:nth-child(2n+1)`
+- `:nth-child(3)`
+- `:nth-child(-2)`
+- `:nth-child(4n)`
+- `:eq(0)`
+- `:eq(-1)`
 
 ## 其他 （非 jQuery 函数）
 

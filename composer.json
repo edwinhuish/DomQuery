@@ -37,7 +37,10 @@
     "ext-json": "*",
     "ext-dom": "*",
     "ext-libxml": "*",
-    "tightenco/collect": "^5"
+    "tightenco/collect": "^5",
+    "bdk/css-xpath": "^1.0",
+    "theseer/css2xpath": "^2.0",
+    "edwinhuish/css-to-xpath": "^1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^6.5",
