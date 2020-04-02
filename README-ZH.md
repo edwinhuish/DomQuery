@@ -1,6 +1,6 @@
 # DomQuery 
 
-[English](README.md) | [中文说明](REDME-ZH.md)
+[English](README.md) | [中文说明](README-ZH.md)
 
 DomQuery是一个PHP库，使您可以轻松地遍历和修改DOM（HTML / XML）。 作为库，它的目标是提供对PHP DOMDocument类的 "仿jQuery" 的访问方式
 
@@ -208,6 +208,6 @@ $dom->find('namespace\\:h1')->text();
 - PHP 7.0 或者以上
 - libxml 扩展 （默认开启）
 
-### Fork by
+### Fork from
 
 - https://github.com/Rct567/DomQuery

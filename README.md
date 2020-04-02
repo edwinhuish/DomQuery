@@ -1,6 +1,6 @@
 # DomQuery 
 
-[English](README.md) | [中文说明](REDME-ZH.md)
+[English](README.md) | [中文说明](README-ZH.md)
 
 DomQuery is a PHP library that allows you to easily traverse and modify the DOM (HTML/XML). As a library it aims to
 provide 'jQuery like' access to the PHP DOMDocument class (http://php.net/manual/en/book.dom.php).
@@ -209,6 +209,6 @@ $dom->find('namespace\\:h1')->text();
 - Works with PHP 7.0 or above
 - Requires libxml PHP extension (enabled by default)
 
-### Fork by
+### Fork from
 
 - https://github.com/Rct567/DomQuery
