@@ -1,6 +1,9 @@
 <?php
 
-namespace DQ\Dom;
+namespace DQ;
+
+use DQ\Helpers\CssToXpath;
+use Tightenco\Collect\Support\Collection;
 
 /**
  * Class DomQueryNodes
@@ -15,7 +18,7 @@ namespace DQ\Dom;
  *
  * @package Rct567\DomQuery
  */
-class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAccess
+abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAccess
 {
 
     /**
@@ -130,6 +133,20 @@ class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAccess
                 throw new \InvalidArgumentException('Unknown argument '.\gettype($arg));
             }
         }
+    }
+
+    public function texts()
+    {
+        return $this->map(function (DomQuery $query) {
+            return $query->text();
+        })->toArray();
+    }
+
+    public function htmls()
+    {
+        return $this->map(function (DomQuery $query) {
+            return $query->html();
+        })->toArray();
     }
 
     /**
@@ -469,12 +486,11 @@ class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @return $this
      */
-    public function each(callable $callback)
+    public function each(callable $callback): self
     {
-        foreach ($this->nodes as $index => $node) {
-            $return_value = \call_user_func($callback, $node, $index);
+        foreach ($this as $index => $domQuery) {
 
-            if ($return_value === false) {
+            if (false === \call_user_func($callback, $domQuery, $index)) {
                 break;
             }
         }
@@ -488,21 +504,19 @@ class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @param  callable  $callback
      *
-     * @return array
+     * @return Collection
      */
-    public function map(callable $callback)
+    public function map(callable $callback): Collection
     {
-        $result = array();
+        $result = new Collection();
 
-        foreach ($this->nodes as $index => $node) {
-            $return_value = \call_user_func($callback, $node, $index);
+        foreach ($this as $index => $domQuery) {
+            $return_value = \call_user_func($callback, $domQuery, $index);
 
             if ($return_value === null) {
                 continue;
-            } elseif (\is_array($return_value)) {
-                $result = \array_merge($result, $return_value);
             } else {
-                $result[] = $return_value;
+                $result->add($return_value);
             }
         }
 

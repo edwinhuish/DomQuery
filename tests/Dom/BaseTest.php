@@ -2,7 +2,7 @@
 
 namespace Tests\Dom;
 
-use DQ\Dom\DomQuery;
+use DQ\DomQuery;
 use Tests\TestCaseBase;
 
 class BaseTest extends TestCaseBase
@@ -255,7 +255,7 @@ class BaseTest extends TestCaseBase
         });
 
         $this->assertCount(2, $result);
-        $this->assertInstanceOf(\DOMNode::class, $result[0]);
+        $this->assertInstanceOf(DomQuery::class, $result[0]);
     }
 
     /*

@@ -1,11 +1,10 @@
 <?php
 
-namespace DQ\Dom;
+namespace DQ;
 
 /**
  * Class DomQuery
- *
- * @package DQ\Dom
+ * @package DQ
  */
 class DomQuery extends DomQueryNodes
 {
@@ -36,6 +35,8 @@ class DomQuery extends DomQueryNodes
         if ($node = $this->getFirstElmNode()) { // get value for first node
             return $node->nodeValue;
         }
+
+        return null;
     }
 
     /**
@@ -49,6 +50,7 @@ class DomQuery extends DomQueryNodes
     {
         if ($html_string !== null) { // set html for all nodes
             foreach ($this as $node) {
+                /* @var DomQuery $node */
                 $node->get(0)->nodeValue = '';
                 $node->append($html_string);
             }
@@ -79,6 +81,8 @@ class DomQuery extends DomQueryNodes
         if ($node = $this->getFirstElmNode()) { // get attribute value for first element
             return $node->getAttribute($name);
         }
+
+        return null;
     }
 
     /**
@@ -130,6 +134,8 @@ class DomQuery extends DomQueryNodes
                 return $val;
             }
         }
+
+        return null;
     }
 
     /**
@@ -233,6 +239,8 @@ class DomQuery extends DomQueryNodes
                 return $style[$name];
             }
         }
+
+        return null;
     }
 
     /**
@@ -484,6 +492,7 @@ class DomQuery extends DomQueryNodes
      */
     public function parent($selector = null)
     {
+        /* @var DomQuery $resule */
         $result = $this->createChildInstance();
 
         if (isset($this->document) && $this->length > 0) {
@@ -555,6 +564,7 @@ class DomQuery extends DomQueryNodes
                     foreach ($this->nodes as $node) {
                         $matched = false;
                         foreach ($selection as $result_node) {
+                            /* @var \DOMNode $result_node */
                             if ($result_node->isSameNode($node)) {
                                 $matched = true;
                                 break 1;
@@ -612,6 +622,7 @@ class DomQuery extends DomQueryNodes
      */
     public function filter($selector)
     {
+        /* @var DomQuery $result */
         $result = $this->createChildInstance();
 
         if ($this->length > 0) {
@@ -625,6 +636,7 @@ class DomQuery extends DomQueryNodes
                 $selection = self::create($this->document)->find($selector);
 
                 foreach ($selection as $result_node) {
+                    /* @var \DOMNode $result_node */
                     foreach ($this->nodes as $node) {
                         if ($result_node->isSameNode($node)) {
                             $result->addDomNode($node);
@@ -722,6 +734,7 @@ class DomQuery extends DomQueryNodes
      */
     public function has($selector)
     {
+        /* @var DomQuery $result */
         $result = $this->createChildInstance();
 
         if ($this->length > 0) {
@@ -995,6 +1008,7 @@ class DomQuery extends DomQueryNodes
     public function append()
     {
         $this->importNodes(\func_get_args(), function ($node, $imported_node) {
+            /* @var \DOMNode $node */
             $node->appendChild($imported_node);
         });
 
@@ -1028,6 +1042,7 @@ class DomQuery extends DomQueryNodes
     public function prepend()
     {
         $this->importNodes(\func_get_args(), function ($node, $imported_node) {
+            /* @var \DOMNode $node */
             $node->insertBefore($imported_node, $node->childNodes->item(0));
         });
 
@@ -1132,6 +1147,7 @@ class DomQuery extends DomQueryNodes
     public function wrap()
     {
         $this->importNodes(\func_get_args(), function ($node, $imported_node) {
+            /* @var \DOMNode $imported_node */
             if ($node->parentNode instanceof \DOMDocument) {
                 throw new \Exception('Can not wrap inside root element '.$node->tagName.' of document');
             }
@@ -1158,10 +1174,13 @@ class DomQuery extends DomQueryNodes
      */
     public function wrapAll()
     {
+        /* @var \DOMNode $wrapper_node */
         $wrapper_node     = null; // node given as wrapper
+        /* @var \DOMNode $wrap_target_node */
         $wrap_target_node = null; // node that wil be parent of content to be wrapped
 
         $this->importNodes(\func_get_args(), function ($node, $imported_node) use (&$wrapper_node, &$wrap_target_node) {
+            /* @var \DOMNode $imported_node */
             if ($node->parentNode instanceof \DOMDocument) {
                 throw new \Exception('Can not wrap inside root element '.$node->tagName.' of document');
             }

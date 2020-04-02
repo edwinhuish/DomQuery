@@ -2,7 +2,7 @@
 
 namespace Tests\Dom;
 
-use DQ\Dom\DomQuery;
+use DQ\DomQuery;
 use Tests\TestCaseBase;
 
 class TraversingMiscellaneousTest extends TestCaseBase

@@ -2,8 +2,8 @@
 
 namespace Tests\Dom;
 
-use DQ\Dom\DomQuery;
-use DQ\Dom\CssToXpath;
+use DQ\DomQuery;
+use DQ\Helpers\CssToXpath;
 use Tests\TestCaseBase;
 
 class SelectorsTest extends TestCaseBase
@@ -38,6 +38,8 @@ class SelectorsTest extends TestCaseBase
             '[href|=\'html\']'            => '//*[@href=\'html\' or starts-with(@href, \'html-\')]',
             '> a'                         => '/a',
             'p > a'                       => '//p/a',
+            'p> a'                        => '//p/a',
+            'p>a'                         => '//p/a',
             'p > a[href]'                 => '//p/a[@href]',
             'p a[href]'                   => '//p//a[@href]',
             ':disabled'                   => '//*[@disabled]',
@@ -57,7 +59,11 @@ class SelectorsTest extends TestCaseBase
             'h1 + ul'                     => '//h1/following-sibling::ul[preceding-sibling::*[1][self::h1]]',
             'h1 ~ #id'                    => '//h1/following-sibling::*[@id=\'id\']',
             'p > a:has(> a)'              => '//p/a[child::a]',
+            'p > a:has(>a)'               => '//p/a[child::a]',
             'p > a:has(b > a)'            => '//p/a[descendant::b/a]',
+            'p > a:has(b> a)'             => '//p/a[descendant::b/a]',
+            'p > a:has(b>a)'                => '//p/a[descendant::b/a]',
+            'p>a:has(b>a)'                => '//p/a[descendant::b/a]',
             'p > a:has(a)'                => '//p/a[descendant::a]',
             'a:has(b)'                    => '//a[descendant::b]',
             'a:first-child:first'         => '(//a[not(preceding-sibling::*)])[1]',

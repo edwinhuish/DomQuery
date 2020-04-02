@@ -1,6 +1,6 @@
 <?php
 
-namespace DQ\Dom;
+namespace DQ\Helpers;
 
 /**
  * Class CssToXpath
@@ -28,6 +28,10 @@ class CssToXpath
             return self::$xpath_cache[$path];
         }
 
+        // add space for '>' in case of no space.
+        $path = preg_replace('/((?<!\()(?<!^)\s*>)/', ' >', $path); // add space before '>', except begin with '(' or the first char
+        $path = preg_replace('/(>\s*(?<!$)(?<!\)))/', '> ', $path); // add space after '>', except end with ')' or the last char
+
         $tmp_path = self::replaceCharInsideEnclosure($path, ',');
         if (strpos($tmp_path, ',') !== false) {
             $paths       = explode(',', $tmp_path);
@@ -43,11 +47,9 @@ class CssToXpath
         }
 
         // replace spaces inside (), to correctly create tokens (restore later)
-
         $path_escaped = self::replaceCharInsideEnclosure($path, ' ');
 
         // create tokens and analyze to create segments
-
         $tokens = preg_split('/\s+/', $path_escaped);
 
         $segments = array();

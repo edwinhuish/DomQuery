@@ -2,8 +2,9 @@
 
 namespace Tests\Dom;
 
-use DQ\Dom\DomQuery;
+use DQ\DomQuery;
 use Tests\TestCaseBase;
+use Tightenco\Collect\Support\Collection;
 
 class TraversingFilterTest extends TestCaseBase
 {
@@ -131,16 +132,61 @@ class TraversingFilterTest extends TestCaseBase
     {
         $dom = new DomQuery('<p> <a>1</a> <a>2,3</a> <a>4</a> <span></span> </p>');
 
-        $map = $dom->find('p > *')->map(function ($elm) {
-            if ($elm->textContent !== '') {
-                if (strpos($elm->textContent, ',') !== false) {
-                    return explode(',', $elm->textContent);
+        $map = $dom->find('p>*')->map(function (DomQuery $dq) {
+            $text = $dq->text();
+            if ($text !== '') {
+                if (strpos($text, ',') !== false) {
+                    return explode(',', $text);
                 } else {
-                    return $elm->textContent;
+                    return $text;
                 }
             }
+            return null;
         });
 
-        $this->assertEquals(['1', '2', '3', '4'], $map);
+        $this->assertInstanceOf(Collection::class, $map);
+        $this->assertEquals(['1', ['2', '3'], '4'], $map->toArray());
+    }
+
+    /**
+     * Test foreach
+     */
+    public function testForeach()
+    {
+        $dom = new DomQuery('<p> <a>1</a> <a>2,3</a> <a>4</a> <span></span> </p>');
+
+        $text = [];
+        foreach ($dom->find('a') as $key => $node) {
+            /* @var \DQ\DomQuery $node */
+            $text[] = $node->text();
+
+            $this->assertInstanceOf(DomQuery::class, $node);
+        }
+
+        $this->assertCount(3, $text);
+        $this->assertEquals(['1', '2,3', '4'], $text);
+
+    }
+
+    public function testEach()
+    {
+        $dom = new DomQuery('<p> <a>1</a> <a>2,3</a> <a>4</a> <span></span> </p>');
+
+        $dom->find('a')->each(function (DomQuery $query, int $index) {
+
+            $this->assertInstanceOf(DomQuery::class, $query);
+
+            if ($index === 1) {
+                return false;
+            }
+
+            $query->text('new text');
+
+        });
+
+        $texts = $dom->find('a')->texts();
+
+        $this->assertEquals(['new text', '2,3', '4'], $texts);
+
     }
 }
