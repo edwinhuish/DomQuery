@@ -486,7 +486,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
      *
      * @return $this
      */
-    public function each(callable $callback): self
+    public function each(callable $callback)
     {
         foreach ($this as $index => $domQuery) {
 
@@ -506,7 +506,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
      *
      * @return Collection
      */
-    public function map(callable $callback): Collection
+    public function map(callable $callback)
     {
         $result = new Collection();
 
