@@ -134,17 +134,24 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         }
     }
 
-    public function texts()
+    public function texts(): array
     {
         return $this->map(function (DomQuery $query) {
             return $query->text();
         })->toArray();
     }
 
-    public function htmls()
+    public function htmls(): array
     {
         return $this->map(function (DomQuery $query) {
             return $query->html();
+        })->toArray();
+    }
+
+    public function attrs(string $name): array
+    {
+        return $this->map(function (DomQuery $query) use ($name) {
+            return $query->attr($name);
         })->toArray();
     }
 
