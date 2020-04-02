@@ -5,6 +5,13 @@ namespace DQ;
 /**
  * Class DomQuery
  * @package DQ
+ *
+ * @property-read string $text
+ * @property-read string $plaintext
+ * @property-read string $html
+ * @property-read string $innerHTML
+ * @property-read string $outerHTML
+ *
  */
 class DomQuery extends DomQueryNodes
 {
@@ -1175,7 +1182,7 @@ class DomQuery extends DomQueryNodes
     public function wrapAll()
     {
         /* @var \DOMNode $wrapper_node */
-        $wrapper_node     = null; // node given as wrapper
+        $wrapper_node = null; // node given as wrapper
         /* @var \DOMNode $wrap_target_node */
         $wrap_target_node = null; // node that wil be parent of content to be wrapped
 
@@ -1231,5 +1238,24 @@ class DomQuery extends DomQueryNodes
     public function __isset($name)
     {
         return $this->__get($name) !== null;
+    }
+
+    public function __get($name)
+    {
+        switch ($name) {
+            case 'text':
+            case 'plaintext':
+                return $this->text();
+                break;
+            case 'html':
+            case 'innerHTML':
+                return $this->html();
+                break;
+            case 'outerHTML':
+                return $this->getOuterHtml();
+                break;
+        }
+
+        return parent::__get($name);
     }
 }

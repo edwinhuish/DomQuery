@@ -12,7 +12,6 @@ use Tightenco\Collect\Support\Collection;
  * @property string $tagName
  * @property string $nodeName
  * @property string $nodeValue
- * @property string $outerHTML
  *
  * @method string getAttribute(string $name)
  *
@@ -618,9 +617,6 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
     {
         if ($name === 'dom_xpath') {
             return $this->createDomXpath();
-        }
-        if ($name === 'outerHTML') {
-            return $this->getOuterHtml();
         }
 
         if ($node = $this->getFirstElmNode()) {
