@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Dom;
+namespace DQTests\Dom;
 
 use DQ\DomQuery;
-use Tests\TestCaseBase;
+use DQTests\TestCaseBase;
 use Tightenco\Collect\Support\Collection;
 
 class TraversingFilterTest extends TestCaseBase

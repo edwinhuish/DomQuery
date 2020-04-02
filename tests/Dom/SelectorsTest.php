@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Dom;
+namespace DQTests\Dom;
 
 use DQ\DomQuery;
 use DQ\Helpers\CssToXpath;
-use Tests\TestCaseBase;
+use DQTests\TestCaseBase;
 
 class SelectorsTest extends TestCaseBase
 {

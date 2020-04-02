@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace DQTests;
 
 use PHPUnit\Framework\TestCase;
 
