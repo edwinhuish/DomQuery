@@ -124,8 +124,12 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
                 $this->addNodes($arg);
             } elseif ($arg instanceof \DOMXPath) {
                 $this->dom_xpath = $arg;
-            } elseif (\is_string($arg) && strpos($arg, '<') !== false) {
-                $this->loadContent($arg);
+            } elseif (\is_string($arg)) {
+                if (strpos($arg, '<') !== false) {
+                    $this->loadContent($arg);
+                } elseif (empty($arg)) {
+                    $this->empty();
+                }
             } elseif (\is_object($arg)) {
                 throw new \InvalidArgumentException('Unknown object '.\get_class($arg).' given as argument');
             } else {
@@ -915,5 +919,24 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
     public function offsetUnset($key)
     {
         throw new \BadMethodCallException('Attempting to unset on a read-only node list');
+    }
+
+    public function empty()
+    {
+        $this->document             = null;
+        $this->nodes                = [];
+        $this->length               = 0;
+        $this->xml_mode             = false;
+        $this->xml_print_pi         = false;
+        $this->preserve_no_newlines = false;
+        $this->root_instance        = null;
+        $this->xpath_query          = '';
+        $this->css_query            = '';
+        $this->selector             = '';
+    }
+
+    public function isEmpty()
+    {
+        return empty($this->document);
     }
 }
