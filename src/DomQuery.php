@@ -75,7 +75,7 @@ class DomQuery extends DomQueryNodes
      * @param  string  $name
      * @param  string  $val
      *
-     * @return $this|string|null
+     * @return $this|string|string[]|null
      */
     public function attr(string $name, $val = null)
     {
@@ -86,6 +86,16 @@ class DomQuery extends DomQueryNodes
             return $this;
         }
         if ($node = $this->getFirstElmNode()) { // get attribute value for first element
+
+            if ('*' === $name) {
+                $attrs = [];
+                /* @var \DOMNode $node */
+                foreach ($node->attributes as $attr) {
+                    $attrs[] = [$attr->nodeName => $attr->nodeValue];
+                }
+                return $attrs;
+            }
+
             return $node->getAttribute($name);
         }
 
