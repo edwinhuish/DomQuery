@@ -490,12 +490,4 @@ class SelectorsTest extends TestCaseBase
         $this->assertEquals(1, $dom->find(':root')->length);
     }
 
-    /*
-     * Test invalid xpath expression
-     */
-    public function testInvalidPseudoSelector()
-    {
-        $this->expectException(\Exception::class);
-        CssToXpath::transform('a:not-a-selector');
-    }
 }
