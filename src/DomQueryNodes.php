@@ -116,10 +116,10 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
 
         foreach (\func_get_args() as $arg) {
             if ($arg instanceof \DOMDocument) {
-                /** @noinspection PhpUnhandledExceptionInspection*/
+                /** @noinspection PhpUnhandledExceptionInspection */
                 $this->setDomDocument($arg);
             } elseif ($arg instanceof \DOMNodeList) {
-                /** @noinspection PhpUnhandledExceptionInspection*/
+                /** @noinspection PhpUnhandledExceptionInspection */
                 $this->loadDomNodeList($arg);
             } elseif ($arg instanceof \DOMNode) {
                 $this->addDomNode($arg);
@@ -155,6 +155,10 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         })->toArray();
     }
 
+    /**
+     * @param  string  $name
+     * @return array
+     */
     public function attrs(string $name): array
     {
         return $this->map(function (DomQuery $query) use ($name) {
@@ -162,6 +166,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         })->toArray();
     }
 
+    /* @noinspection PhpDocMissingThrowsInspection */
     /**
      * Create new instance of self with some properties of its parents
      *
@@ -172,7 +177,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         $instance = new static(...\func_get_args());
 
         if (isset($this->document)) {
-            /** @noinspection PhpUnhandledExceptionInspection*/
+            /** @noinspection PhpUnhandledExceptionInspection */
             $instance->setDomDocument($this->document);
         }
 
@@ -193,6 +198,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         return $instance;
     }
 
+    /* @noinspection PhpDocMissingThrowsInspection */
     /**
      * Use xpath and return new DomQuery with resulting nodes
      *
@@ -209,16 +215,16 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
 
             if (isset($this->root_instance) || isset($this->xpath_query)) {  // all nodes as context
                 foreach ($this->nodes as $node) {
-                    /** @noinspection PhpUnhandledExceptionInspection*/
+                    /** @noinspection PhpUnhandledExceptionInspection */
                     if ($result_node_list = $this->xpathQuery('.'.$xpath_query, $node)) {
-                        /** @noinspection PhpUnhandledExceptionInspection*/
+                        /** @noinspection PhpUnhandledExceptionInspection */
                         $result->loadDomNodeList($result_node_list);
                     }
                 }
             } else { // whole document
-                /** @noinspection PhpUnhandledExceptionInspection*/
+                /** @noinspection PhpUnhandledExceptionInspection */
                 if ($result_node_list = $this->xpathQuery($xpath_query)) {
-                    /** @noinspection PhpUnhandledExceptionInspection*/
+                    /** @noinspection PhpUnhandledExceptionInspection */
                     $result->loadDomNodeList($result_node_list);
                 }
             }
@@ -292,6 +298,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         }
     }
 
+    /* @noinspection PhpDocMissingThrowsInspection */
     /**
      * Add node to result set
      *
@@ -309,7 +316,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         }
 
         $this->length = \count($this->nodes);
-        /** @noinspection PhpUnhandledExceptionInspection*/
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->setDomDocument($dom_node->ownerDocument);
     }
 
@@ -351,7 +358,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         } else {
             $dom_document->loadHTML($content, $this->libxml_options);
         }
-        /** @noinspection PhpUnhandledExceptionInspection*/
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->setDomDocument($dom_document);
 
         if ($xml_pi_node_added) { // pi node added, now remove it

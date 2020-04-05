@@ -963,11 +963,22 @@ class DomQuery extends DomQueryNodes
         return $result;
     }
 
+    /**
+     * Empty Dom
+     *
+     * @return $this
+     */
     public function empty()
     {
         $this->remove();
+        return $this;
     }
 
+    /**
+     * Check if is empty
+     *
+     * @return bool
+     */
     public function isEmpty()
     {
         return empty($this->document);
