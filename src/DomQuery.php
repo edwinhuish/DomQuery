@@ -419,6 +419,7 @@ class DomQuery extends DomQueryNodes
                 return $node->$name;
             }
         }
+        return null;
     }
 
     /**
@@ -431,6 +432,7 @@ class DomQuery extends DomQueryNodes
         return $this->children(false);
     }
 
+    /* @noinspection PhpDocMissingThrowsInspection */
     /**
      * Get the children of each element in the set of matched elements, optionally filtered by a selector.
      *
@@ -446,10 +448,12 @@ class DomQuery extends DomQueryNodes
             if (isset($this->root_instance) || $this->getXpathQuery()) {
                 foreach ($this->nodes as $node) {
                     if ($node->hasChildNodes()) {
+                        /* @noinspection PhpUnhandledExceptionInspection */
                         $result->loadDomNodeList($node->childNodes);
                     }
                 }
             } else {
+                /* @noinspection PhpUnhandledExceptionInspection */
                 $result->loadDomNodeList($this->document->childNodes);
             }
 
@@ -959,21 +963,37 @@ class DomQuery extends DomQueryNodes
         return $result;
     }
 
+    public function empty()
+    {
+        $this->remove();
+    }
+
+    public function isEmpty()
+    {
+        return empty($this->document);
+    }
+
     /**
      * Import nodes and insert or append them via callback function
      *
      * @param  string|self|array  $content
      * @param  callable  $import_function
      *
-     * @return void
+     * @return \DOMNode[] $imported_nodes
      */
     private function importNodes($content, callable $import_function)
     {
+        /* @var \DOMNode[] */
+        $imported_nodes = [];
+
         if (\is_array($content)) {
             foreach ($content as $item) {
-                $this->importNodes($item, $import_function);
+                $imported_nodes = array_merge($imported_nodes, $this->importNodes($item, $import_function));
             }
+            return $imported_nodes;
+
         } else {
+
             if (\is_string($content) && strpos($content, "\n") !== false) {
                 $this->preserve_no_newlines = false;
                 if (isset($this->root_instance)) {
@@ -992,10 +1012,15 @@ class DomQuery extends DomQueryNodes
                     } else {
                         $imported_node = $this->document->importNode($content_node, true);
                     }
-                    $import_function($node, $imported_node);
+                    $imported_node = $import_function($node, $imported_node);
+                    if ($imported_node instanceof \DOMNode) {
+                        $imported_nodes[] = $imported_node;
+                    }
                 }
             }
         }
+
+        return $imported_nodes;
     }
 
     /**
@@ -1043,10 +1068,14 @@ class DomQuery extends DomQueryNodes
     {
         $target_result = $this->getTargetResult($target);
 
-        $target_result->append($this);
+        $nodes = $target_result->importNodes($this, function ($node, $imported_node) {
+            /* @var \DOMNode $node */
+            return $node->appendChild($imported_node);
+        });
+
         $this->remove();
 
-        return $target_result;
+        return $target_result->find($nodes);
     }
 
     /**
@@ -1077,10 +1106,14 @@ class DomQuery extends DomQueryNodes
     {
         $target_result = $this->getTargetResult($target);
 
-        $target_result->prepend($this);
+        $nodes = $target_result->importNodes($this, function ($node, $imported_node) {
+            /* @var \DOMNode $node */
+            return $node->insertBefore($imported_node, $node->childNodes->item(0));
+        });
+
         $this->remove();
 
-        return $target_result;
+        return $target_result->find($nodes);
     }
 
     /**

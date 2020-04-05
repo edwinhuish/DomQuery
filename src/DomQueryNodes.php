@@ -100,6 +100,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
      */
     public $selector;
 
+    /* @noinspection PhpDocMissingThrowsInspection */
     /**
      * Constructor
      *
@@ -115,8 +116,10 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
 
         foreach (\func_get_args() as $arg) {
             if ($arg instanceof \DOMDocument) {
+                /** @noinspection PhpUnhandledExceptionInspection*/
                 $this->setDomDocument($arg);
             } elseif ($arg instanceof \DOMNodeList) {
+                /** @noinspection PhpUnhandledExceptionInspection*/
                 $this->loadDomNodeList($arg);
             } elseif ($arg instanceof \DOMNode) {
                 $this->addDomNode($arg);
@@ -169,6 +172,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         $instance = new static(...\func_get_args());
 
         if (isset($this->document)) {
+            /** @noinspection PhpUnhandledExceptionInspection*/
             $instance->setDomDocument($this->document);
         }
 
@@ -205,12 +209,16 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
 
             if (isset($this->root_instance) || isset($this->xpath_query)) {  // all nodes as context
                 foreach ($this->nodes as $node) {
+                    /** @noinspection PhpUnhandledExceptionInspection*/
                     if ($result_node_list = $this->xpathQuery('.'.$xpath_query, $node)) {
+                        /** @noinspection PhpUnhandledExceptionInspection*/
                         $result->loadDomNodeList($result_node_list);
                     }
                 }
             } else { // whole document
+                /** @noinspection PhpUnhandledExceptionInspection*/
                 if ($result_node_list = $this->xpathQuery($xpath_query)) {
+                    /** @noinspection PhpUnhandledExceptionInspection*/
                     $result->loadDomNodeList($result_node_list);
                 }
             }
@@ -301,9 +309,11 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         }
 
         $this->length = \count($this->nodes);
+        /** @noinspection PhpUnhandledExceptionInspection*/
         $this->setDomDocument($dom_node->ownerDocument);
     }
 
+    /* @noinspection PhpDocMissingThrowsInspection */
     /**
      * Load html or xml content
      *
@@ -341,7 +351,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         } else {
             $dom_document->loadHTML($content, $this->libxml_options);
         }
-
+        /** @noinspection PhpUnhandledExceptionInspection*/
         $this->setDomDocument($dom_document);
 
         if ($xml_pi_node_added) { // pi node added, now remove it
@@ -635,6 +645,8 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
                 return $node;
             }
         }
+
+        return null;
     }
 
     /**
@@ -919,24 +931,5 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
     public function offsetUnset($key)
     {
         throw new \BadMethodCallException('Attempting to unset on a read-only node list');
-    }
-
-    public function empty()
-    {
-        $this->document             = null;
-        $this->nodes                = [];
-        $this->length               = 0;
-        $this->xml_mode             = false;
-        $this->xml_print_pi         = false;
-        $this->preserve_no_newlines = false;
-        $this->root_instance        = null;
-        $this->xpath_query          = '';
-        $this->css_query            = '';
-        $this->selector             = '';
-    }
-
-    public function isEmpty()
-    {
-        return empty($this->document);
     }
 }
