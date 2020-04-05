@@ -143,15 +143,17 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
 
     public function texts(): array
     {
-        return $this->map(function (DomQuery $query) {
-            return $query->text();
-        })->toArray();
+        $texts = [];
+        foreach ($this->getNodes() as $node){
+            $texts[] = $node->nodeValue;
+        };
+        return $texts;
     }
 
     public function htmls(): array
     {
         return $this->map(function (DomQuery $query) {
-            return $query->html();
+            return $query->getInnerHtml();
         })->toArray();
     }
 
