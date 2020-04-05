@@ -589,7 +589,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
      *
      * @return \DOMNode[]
      */
-    protected function getNodes()
+    public function getNodes()
     {
         return $this->nodes;
     }
