@@ -95,7 +95,7 @@ class BaseTest extends TestCaseBase
     public function testLoadingUf8AndGettingSameContent()
     {
         $html = '<div><h1>Iñtërnâtiônàlizætiøn</h1></div><a>k</a>';
-        $dom  = new DomQuery($html);
+        $dom = new DomQuery($html);
 
         $this->assertEquals($html, (string) $dom); // same result
         $this->assertEquals('<h1>Iñtërnâtiônàlizætiøn</h1>', (string) $dom->find('h1')); // same header
@@ -227,7 +227,7 @@ class BaseTest extends TestCaseBase
      */
     public function testChangeAttributeWithoutValueInXmlWriteMode()
     {
-        $dom           = new DomQuery('<div selected>a</div>');
+        $dom = new DomQuery('<div selected>a</div>');
         $dom->xml_mode = true;
         $this->assertEquals("<div selected=\"selected\">a</div>", (string) $dom);
     }
@@ -276,7 +276,7 @@ class BaseTest extends TestCaseBase
         $this->assertInstanceOf(DomQuery::class, $dom->parent('a')->next('b')->prev('c'));
         $this->assertInstanceOf(DomQuery::class, $dom->not('a')->filter('b'));
 
-        $this->assertNull($dom->getDocument());
+        $this->assertNull($dom->getDOMDocument());
         $this->assertNull($dom->getXpathQuery());
         $this->assertNull($dom->getCssQuery());
         $this->assertNull($dom->getCssQuery());
@@ -353,7 +353,7 @@ class BaseTest extends TestCaseBase
     {
         $this->expectException(\Exception::class);
         $empty_node_list = (new \DOMDocument())->getElementsByTagName('nope');
-        $dom             = new DomQuery($empty_node_list);
+        $dom = new DomQuery($empty_node_list);
     }
 
     /*
@@ -371,7 +371,7 @@ class BaseTest extends TestCaseBase
     public function testArrayAccessSet()
     {
         $this->expectException(\BadMethodCallException::class);
-        $dom            = new DomQuery();
+        $dom = new DomQuery();
         $dom['invalid'] = null;
     }
 

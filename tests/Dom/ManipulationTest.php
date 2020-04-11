@@ -182,7 +182,7 @@ class ManipulationTest extends TestCaseBase
      */
     public function testAppendToOther()
     {
-        $dom = DomQuery::create('<span>Hello</span>')->appendTo(DomQuery::create('<div>P</div>'));
+        $dom = DomQuery::create('<span>Hello</span>')->appendTo(DomQuery::create('<div>P</div>'))->parent();
         $this->assertEquals('<div>P<span>Hello</span></div>', (string) $dom);
     }
 
@@ -222,7 +222,7 @@ class ManipulationTest extends TestCaseBase
      */
     public function testPrependToOther()
     {
-        $dom = DomQuery::create('<span>Hello</span>')->prependTo(DomQuery::create('<div>P</div>'));
+        $dom = DomQuery::create('<span>Hello</span>')->prependTo(DomQuery::create('<div>P</div>'))->parent();
         $this->assertEquals('<div><span>Hello</span>P</div>', (string) $dom);
     }
 
@@ -277,7 +277,7 @@ class ManipulationTest extends TestCaseBase
      */
     public function testGetHtmlInXmlMode()
     {
-        $dom           = new DomQuery('<p> <a>M<i selected>A</i></a> <span></span> </p>');
+        $dom = new DomQuery('<p> <a>M<i selected>A</i></a> <span></span> </p>');
         $dom->xml_mode = true;
         $this->assertEquals('M<i selected="selected">A</i>', $dom->find('a')->html()); // inner
         $this->assertEquals('<a>M<i selected="selected">A</i></a>', $dom->find('a')->prop('outerHTML')); // outer
@@ -361,7 +361,7 @@ class ManipulationTest extends TestCaseBase
      */
     public function testReplaceWith()
     {
-        $dom     = new DomQuery('<div> <a class="a"></a> <a class="b"></a> <a class="c"></a> </div>');
+        $dom = new DomQuery('<div> <a class="a"></a> <a class="b"></a> <a class="c"></a> </div>');
         $removed = $dom->find('.b')->replaceWith('<h2>Hello</h2>');
         $this->assertEquals('<a class="b"></a>', (string) $removed);
         $this->assertEquals('<div> <a class="a"></a> <h2>Hello</h2> <a class="c"></a> </div>', (string) $dom);
@@ -372,7 +372,7 @@ class ManipulationTest extends TestCaseBase
      */
     public function testReplaceWithSelection()
     {
-        $dom     = new DomQuery('<div> <a class="a"></a> <a class="b"></a> <a class="c"></a> </div>');
+        $dom = new DomQuery('<div> <a class="a"></a> <a class="b"></a> <a class="c"></a> </div>');
         $removed = $dom->find('.c')->replaceWith($dom->find('.a'));
         $this->assertEquals('<a class="c"></a>', (string) $removed);
         $this->assertEquals('<div>  <a class="b"></a> <a class="a"></a> </div>', (string) $dom);

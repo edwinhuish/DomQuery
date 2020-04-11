@@ -83,6 +83,68 @@ class MethodsTest extends TestCaseBase
 
         $html = $dom->getOuterHtml();
 
-        $this->assertEquals('<div class="container"><div id="el1"><div id="el2"></div><a></a><a></a></div><a></a><a></a></div>', $html);
+        $this->assertEquals('<div class="container"><div id="el1"><div id="el2"></div><a></a><a></a></div><a></a><a></a></div>',
+            $html);
     }
+
+    public function testUnWrap()
+    {
+        $dom = new DomQuery('<div class="root"><div class="wrapper"><div id="content"><span>this is a simple text</span><a href="#">link test</a></div></div></div>');
+
+        $content = $dom->find('#content');
+        $unWraped = $content->unWrap();
+
+        $html = $unWraped->getOuterHtml();
+
+        $docHtml = $unWraped->getRoot()->getOuterHtml();
+
+        $this->assertEquals(
+            '<div class="wrapper"><span>this is a simple text</span><a href="#">link test</a></div>',
+            $html);
+        $this->assertEquals(
+            '<div class="root"><div class="wrapper"><span>this is a simple text</span><a href="#">link test</a></div></div>',
+            $docHtml);
+
+    }
+
+    public function testUnWrap2()
+    {
+        $dom = new DomQuery('<div class="root"><div id="wrapper"><div id="content">this is a simple text<a href="#">link test</a></div></div></div>');
+
+        $wrapper = $dom->find('#wrapper');
+        $unWraped = $wrapper->unWrap();
+
+        $html = $unWraped->getOuterHtml();
+
+        $docHtml = $unWraped->getRoot()->getOuterHtml();
+
+        $this->assertEquals(
+            '<div class="root"><div id="content">this is a simple text<a href="#">link test</a></div></div>',
+            $html);
+        $this->assertEquals(
+            '<div class="root"><div id="content">this is a simple text<a href="#">link test</a></div></div>',
+            $docHtml);
+
+    }
+
+    public function testUnWrap3()
+    {
+        $dom = new DomQuery('<div class="root"><div id="wrapper"><div id="content">this is a simple text<a href="#">link test</a></div><div class="content2">content2 text</div></div></div>');
+
+        $wrapper = $dom->find('#wrapper');
+        $unWraped = $wrapper->unWrap();
+
+        $html = $unWraped->getOuterHtml();
+
+        $docHtml = $unWraped->getRoot()->getOuterHtml();
+
+        $this->assertEquals(
+            '<div class="root"><div id="content">this is a simple text<a href="#">link test</a></div><div class="content2">content2 text</div></div>',
+            $html);
+        $this->assertEquals(
+            '<div class="root"><div id="content">this is a simple text<a href="#">link test</a></div><div class="content2">content2 text</div></div>',
+            $docHtml);
+
+    }
+
 }

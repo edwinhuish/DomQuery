@@ -123,6 +123,11 @@ DomQuery::create('<a title="hello"></a>')->attr('title') // hello
 - `.wrapAll( [content] )`
 - `.wrapInner( [content] )`
 - `.remove( [selector] )`
+- `.unWrap()`
+- `.first()`
+- `.last()`
+- `.gt( int $index )`
+- `.lt( int $index )`
 
 <sub>\* __[content]__ can be html or an instance of DomQuery|DOMNodeList|DOMNode</sub>
 
@@ -186,11 +191,15 @@ DomQuery::create('<a title="hello"></a>')->attr('title') // hello
 - `:nth-child(odd)`
 - `:nth-child(3n+8)`
 - `:nth-child(2n+1)`
+- `:nth-child(n+4)` same as `:gt(2)`
+- `:nth-child(-n+4)` same as `:lt(4)`
 - `:nth-child(3)`
 - `:nth-child(-2)`
 - `:nth-child(4n)`
 - `:eq(0)`
 - `:eq(-1)`
+- `:lt(3)`
+- `:gt(2)`
 
 ## Other (non jQuery) methods
 
@@ -198,6 +207,7 @@ DomQuery::create('<a title="hello"></a>')->attr('title') // hello
 - `loadContent(content, encoding='UTF-8')` load html/xml content
 - `xpath(xpath_query)` Use xpath to find descendants of each element in the current set of matched elements
 - `getOuterHtml()` get resulting html describing all the elements (same as `(string) $dom`, or `$elm->prop('outerHTML')`)
+- `getRoot()` get the root node
 
 ## XML support
 

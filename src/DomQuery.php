@@ -140,7 +140,7 @@ class DomQuery extends DomQueryNodes
                 $data = array();
                 foreach ($node->attributes as $attr) {
                     if (strpos($attr->nodeName, 'data-') === 0) {
-                        $val                              = $attr->nodeValue[0] === '{' ? json_decode($attr->nodeValue) : $attr->nodeValue;
+                        $val = $attr->nodeValue[0] === '{' ? json_decode($attr->nodeValue) : $attr->nodeValue;
                         $data[substr($attr->nodeName, 5)] = $val;
                     }
                 }
@@ -165,7 +165,7 @@ class DomQuery extends DomQueryNodes
     public function removeData($name = null)
     {
         $remove_names = \is_array($name) ? $name : explode(' ', $name);
-        $doc_hash     = spl_object_hash($this->document);
+        $doc_hash = spl_object_hash($this->document);
 
         if ( ! isset(self::$node_data[$doc_hash])) {
             return;
@@ -202,12 +202,12 @@ class DomQuery extends DomQueryNodes
     private static function parseStyle(string $css)
     {
         $statements = explode(';', preg_replace('/\s+/s', ' ', $css));
-        $styles     = array();
+        $styles = array();
 
         foreach ($statements as $statement) {
             if ($p = strpos($statement, ':')) {
-                $key          = trim(substr($statement, 0, $p));
-                $value        = trim(substr($statement, $p + 1));
+                $key = trim(substr($statement, 0, $p));
+                $value = trim(substr($statement, $p + 1));
                 $styles[$key] = $value;
             }
         }
@@ -244,7 +244,7 @@ class DomQuery extends DomQueryNodes
     {
         if ($val !== null) { // set css for all nodes
             foreach ($this->getElements() as $node) {
-                $style        = self::parseStyle($node->getAttribute('style'));
+                $style = self::parseStyle($node->getAttribute('style'));
                 $style[$name] = $val;
                 $node->setAttribute('style', self::getStyle($style));
             }
@@ -344,11 +344,11 @@ class DomQuery extends DomQueryNodes
 
         foreach ($this->nodes as $node) {
             if ($node instanceof \DOMElement && $node->hasAttribute('class')) {
-                $node_classes  = preg_split('#\s+#s', $node->getAttribute('class'));
+                $node_classes = preg_split('#\s+#s', $node->getAttribute('class'));
                 $class_removed = false;
 
                 if ($class_name === '') { // remove all
-                    $node_classes  = array();
+                    $node_classes = array();
                     $class_removed = true;
                 } else {
                     foreach ($remove_names as $remove_name) {
@@ -444,31 +444,33 @@ class DomQuery extends DomQueryNodes
     {
         $result = $this->createChildInstance();
 
-        if (isset($this->document) && $this->length > 0) {
-            if (isset($this->root_instance) || $this->getXpathQuery()) {
-                foreach ($this->nodes as $node) {
-                    if ($node->hasChildNodes()) {
-                        /* @noinspection PhpUnhandledExceptionInspection */
-                        $result->loadDomNodeList($node->childNodes);
-                    }
-                }
-            } else {
-                /* @noinspection PhpUnhandledExceptionInspection */
-                $result->loadDomNodeList($this->document->childNodes);
-            }
+        if ( ! isset($this->document) || $this->length <= 0) {
+            return $result;
+        }
 
-            if ($selector !== false) { // filter out text nodes
-                $filtered_elements = array();
-                foreach ($result->getElements() as $result_elm) {
-                    $filtered_elements[] = $result_elm;
+        if (isset($this->root_instance) || $this->getXpathQuery()) {
+            foreach ($this->nodes as $node) {
+                if ($node->hasChildNodes()) {
+                    /* @noinspection PhpUnhandledExceptionInspection */
+                    $result->loadDomNodeList($node->childNodes);
                 }
-                $result->nodes  = $filtered_elements;
-                $result->length = \count($result->nodes);
             }
+        } else {
+            /* @noinspection PhpUnhandledExceptionInspection */
+            $result->loadDomNodeList($this->document->childNodes);
+        }
 
-            if ($selector) {
-                $result = $result->filter($selector);
+        if ($selector !== false) { // filter out text nodes
+            $filtered_elements = array();
+            foreach ($result->getElements() as $result_elm) {
+                $filtered_elements[] = $result_elm;
             }
+            $result->nodes = $filtered_elements;
+            $result->length = \count($result->nodes);
+        }
+
+        if ($selector) {
+            $result = $result->filter($selector);
         }
 
         return $result;
@@ -543,19 +545,22 @@ class DomQuery extends DomQueryNodes
     {
         $result = $this->createChildInstance();
 
-        if (isset($this->document) && $this->length > 0) {
-            foreach ($this->nodes as $node) {
-                $current = $node;
+        if ( ! isset($this->document) || $this->length <= 0) {
+            return $result;
+        }
 
-                while ($current instanceof \DOMElement) {
-                    if (self::create($current)->is($selector)) {
-                        $result->addDomNode($current);
-                        break;
-                    }
-                    $current = $current->parentNode;
+        foreach ($this->nodes as $node) {
+            $current = $node;
+
+            while ($current instanceof \DOMElement) {
+                if (self::create($current)->is($selector)) {
+                    $result->addDomNode($current);
+                    break;
                 }
+                $current = $current->parentNode;
             }
         }
+
 
         return $result;
     }
@@ -614,7 +619,7 @@ class DomQuery extends DomQueryNodes
      */
     public function add($selector, $context = null)
     {
-        $result        = $this->createChildInstance();
+        $result = $this->createChildInstance();
         $result->nodes = $this->nodes;
 
         $selection = $this->getTargetResult($selector, $context);
@@ -779,8 +784,8 @@ class DomQuery extends DomQueryNodes
      */
     public function slice($offset = 0, $length = null)
     {
-        $result         = $this->createChildInstance();
-        $result->nodes  = \array_slice($this->nodes, $offset, $length);
+        $result = $this->createChildInstance();
+        $result->nodes = \array_slice($this->nodes, $offset, $length);
         $result->length = \count($result->nodes);
         return $result;
     }
@@ -957,7 +962,7 @@ class DomQuery extends DomQueryNodes
             }
         }
 
-        $result->nodes  = array();
+        $result->nodes = array();
         $result->length = 0;
 
         return $result;
@@ -1280,6 +1285,49 @@ class DomQuery extends DomQueryNodes
         }
 
         return $this;
+    }
+
+    /* @noinspection PhpDocMissingThrowsInspection */
+    /**
+     * UnWrap HTML structure
+     *
+     * @return DomQuery
+     */
+    public function unWrap()
+    {
+        $result = $this->createChildInstance();
+
+        if ( ! isset($this->document) || $this->length <= 0) {
+            return $result;
+        }
+
+        /** @var \DOMNode $parentNode */
+        $parentNode = null;
+
+        /** @var \DOMNode $node */
+        foreach ($this->nodes as $node) {
+
+            $current = $node;
+
+            if ($node instanceof \DOMDocument) {
+                /** @noinspection PhpUnhandledExceptionInspection */
+                throw new \Exception('Can not unWrap the root element '.$current->tagName.' of document');
+            }
+
+            $parentNode = $current->parentNode;
+
+            while ($current->hasChildNodes()) {
+                /** @var \DOMNode $child */
+                foreach ($current->childNodes as $child) {
+                    $parentNode->appendChild($child);
+                }
+            }
+
+            $parentNode->removeChild($node);
+            $result->addDomNode($parentNode);
+        }
+
+        return $result;
     }
 
     /**

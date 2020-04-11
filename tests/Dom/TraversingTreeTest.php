@@ -14,7 +14,7 @@ class TraversingTreeTest extends TestCaseBase
     {
         $dom = new DomQuery('<a>1</a><a>2</a><a id="last">3</a>');
         $this->assertEquals('<a>1</a><a>2</a><a id="last">3</a>', (string) $dom->find($dom->find('a')));
-        $this->assertEquals('<a id="last">3</a>', (string) $dom->find($dom->getDocument()->getElementById('last')));
+        $this->assertEquals('<a id="last">3</a>', (string) $dom->find($dom->getDOMDocument()->getElementById('last')));
         $this->assertEquals('<a id="last">3</a>', (string) $dom->find($dom->find('a:contains(3)')));
     }
 
@@ -98,7 +98,7 @@ class TraversingTreeTest extends TestCaseBase
      */
     public function testSiblings()
     {
-        $dom      = new DomQuery('<div><a>1</a> <a id="target">2</a> <a>3</a></div>');
+        $dom = new DomQuery('<div><a>1</a> <a id="target">2</a> <a>3</a></div>');
         $siblings = $dom->find('#target')->siblings();
 
         $this->assertEquals(2, $siblings->length);
@@ -111,7 +111,7 @@ class TraversingTreeTest extends TestCaseBase
      */
     public function testChildren()
     {
-        $dom      = new DomQuery('<div><a>1</a> <a>2</a> <a>3</a></div>');
+        $dom = new DomQuery('<div><a>1</a> <a>2</a> <a>3</a></div>');
         $children = $dom->find('div')->children();
 
         $this->assertEquals(3, $children->length);
@@ -124,7 +124,7 @@ class TraversingTreeTest extends TestCaseBase
      */
     public function testContents()
     {
-        $dom      = new DomQuery('<div> <a>1</a> <a>2</a> <a>3</a> </div>');
+        $dom = new DomQuery('<div> <a>1</a> <a>2</a> <a>3</a> </div>');
         $children = $dom->find('div')->contents();
 
         $this->assertEquals(7, $children->length); // 3 elements plus 4 spaces
@@ -165,7 +165,7 @@ class TraversingTreeTest extends TestCaseBase
      */
     public function testTraversingNodesReadmeExamples()
     {
-        $dom   = new DomQuery('<a>1</a> <a>2</a> <a>3</a>');
+        $dom = new DomQuery('<a>1</a> <a>2</a> <a>3</a>');
         $links = $dom->children('a');
 
         $result = '';
@@ -205,13 +205,13 @@ class TraversingTreeTest extends TestCaseBase
         $dom = new DomQuery($html);
         $this->assertEquals('main', $dom->id);
         $this->assertEquals('root', $dom->class);
-        $this->assertTrue($dom->is($dom->getDocument()->getElementById('main')));
+        $this->assertTrue($dom->is($dom->getDOMDocument()->getElementById('main')));
 
         // main selection
         $main_selection = $dom->find('.level-a');
         $this->assertCount(3, $main_selection);
-        $this->assertTrue($main_selection->is($dom->getDocument()->getElementsByTagName('div')));
-        $this->assertFalse($main_selection->is($dom->getDocument()->getElementById('main')));
+        $this->assertTrue($main_selection->is($dom->getDOMDocument()->getElementsByTagName('div')));
+        $this->assertFalse($main_selection->is($dom->getDOMDocument()->getElementById('main')));
 
         // make sub selection
         $sub_selection = $main_selection->find('> div'); // child divs from main selection

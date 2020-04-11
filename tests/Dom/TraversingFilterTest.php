@@ -41,7 +41,7 @@ class TraversingFilterTest extends TestCaseBase
      */
     public function testFilter()
     {
-        $dom       = new DomQuery('<a>hai</a> <a></a> <a id="mmm"></a> <a class="x"></a> <a class="xpp"></a>');
+        $dom = new DomQuery('<a>hai</a> <a></a> <a id="mmm"></a> <a class="x"></a> <a class="xpp"></a>');
         $selection = $dom->find('a');
         $this->assertEquals(5, $selection->length);
         $this->assertEquals(5, $selection->filter('a')->length);
@@ -49,7 +49,7 @@ class TraversingFilterTest extends TestCaseBase
             return $node->tagName == 'a';
         })->length);
         $this->assertEquals(1, $selection->filter('#mmm')->length);
-        $this->assertEquals(1, $selection->filter($dom->getDocument()->getElementById('mmm'))->length);
+        $this->assertEquals(1, $selection->filter($dom->getDOMDocument()->getElementById('mmm'))->length);
         $this->assertEquals(1, $selection->filter('a')->filter('.xpp')->length);
         $this->assertEquals(3, $selection->filter('a[class], #mmm')->length);
         $this->assertEquals(3, $selection->filter(':even')->length);
@@ -61,7 +61,7 @@ class TraversingFilterTest extends TestCaseBase
      */
     public function testNot()
     {
-        $dom       = new DomQuery('<a>hai</a> <a></a> <a id="mmm"></a> <a class="x"></a> <a class="xpp"></a>');
+        $dom = new DomQuery('<a>hai</a> <a></a> <a id="mmm"></a> <a class="x"></a> <a class="xpp"></a>');
         $selection = $dom->find('a');
         $this->assertEquals(5, $selection->length);
         $this->assertEquals(5, $selection->not('p')->length);
@@ -73,7 +73,7 @@ class TraversingFilterTest extends TestCaseBase
         $this->assertEquals(2, $selection->not(function ($node) {
             return $node->hasAttributes();
         })->length);
-        $this->assertEquals(4, $selection->not($dom->getDocument()->getElementById('mmm'))->length);
+        $this->assertEquals(4, $selection->not($dom->getDOMDocument()->getElementById('mmm'))->length);
         $inner = (string) $selection->not($dom->find('a:first-child, a:last-child'));
         $this->assertEquals('<a></a><a id="mmm"></a><a class="x"></a>', $inner);
     }
@@ -83,7 +83,7 @@ class TraversingFilterTest extends TestCaseBase
      */
     public function testFirstLast()
     {
-        $dom   = new DomQuery('<a>1</a> <a>2</a> <a>3</a>');
+        $dom = new DomQuery('<a>1</a> <a>2</a> <a>3</a>');
         $links = $dom->children('a');
 
         $this->assertEquals(3, $links->length);

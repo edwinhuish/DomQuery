@@ -122,6 +122,11 @@ DomQuery::create('<a title="hello"></a>')->attr('title') // hello
 - `.wrapAll( [content] )`
 - `.wrapInner( [content] )`
 - `.remove( [selector] )`
+- `.unWrap()`
+- `.first()`
+- `.last()`
+- `.gt( int $index )`
+- `.lt( int $index )`
 
 <sub>\* __[content]__ 可以是 html 或者 DomQuery|DOMNodeList|DOMNode 对象实例</sub>
 
@@ -185,11 +190,15 @@ DomQuery::create('<a title="hello"></a>')->attr('title') // hello
 - `:nth-child(odd)`
 - `:nth-child(3n+8)`
 - `:nth-child(2n+1)`
+- `:nth-child(n+4)` 等同于 `:gt(2)`
+- `:nth-child(-n+4)` 等同于 `:lt(4)`
 - `:nth-child(3)`
 - `:nth-child(-2)`
 - `:nth-child(4n)`
 - `:eq(0)`
 - `:eq(-1)`
+- `:lt(3)`
+- `:gt(2)`
 
 ## 其他 （非 jQuery 函数）
 

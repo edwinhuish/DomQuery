@@ -212,25 +212,28 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
     {
         $result = $this->createChildInstance();
 
-        if (isset($this->document)) {
-            $result->xpath_query = $xpath_query;
+        if ( ! isset($this->document)) {
+            return $result;
+        }
 
-            if (isset($this->root_instance) || isset($this->xpath_query)) {  // all nodes as context
-                foreach ($this->nodes as $node) {
-                    /** @noinspection PhpUnhandledExceptionInspection */
-                    if ($result_node_list = $this->xpathQuery('.'.$xpath_query, $node)) {
-                        /** @noinspection PhpUnhandledExceptionInspection */
-                        $result->loadDomNodeList($result_node_list);
-                    }
-                }
-            } else { // whole document
+        $result->xpath_query = $xpath_query;
+
+        if (isset($this->root_instance) || isset($this->xpath_query)) {  // all nodes as context
+            foreach ($this->nodes as $node) {
                 /** @noinspection PhpUnhandledExceptionInspection */
-                if ($result_node_list = $this->xpathQuery($xpath_query)) {
+                if ($result_node_list = $this->xpathQuery('.'.$xpath_query, $node)) {
                     /** @noinspection PhpUnhandledExceptionInspection */
                     $result->loadDomNodeList($result_node_list);
                 }
             }
+        } else { // whole document
+            /** @noinspection PhpUnhandledExceptionInspection */
+            if ($result_node_list = $this->xpathQuery($xpath_query)) {
+                /** @noinspection PhpUnhandledExceptionInspection */
+                $result->loadDomNodeList($result_node_list);
+            }
         }
+
 
         return $result;
     }
@@ -343,17 +346,17 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
 
         $xml_pi_node_added = false;
         if ( ! $this->xml_mode && $encoding && stripos($content, '<?xml') === false) {
-            $content           = '<?xml encoding="'.$encoding.'">'.$content; // add pi node to make libxml use the correct encoding
+            $content = '<?xml encoding="'.$encoding.'">'.$content; // add pi node to make libxml use the correct encoding
             $xml_pi_node_added = true;
         }
 
         libxml_disable_entity_loader(true);
         libxml_use_internal_errors(true);
 
-        $dom_document                      = new \DOMDocument('1.0', $encoding);
+        $dom_document = new \DOMDocument('1.0', $encoding);
         $dom_document->strictErrorChecking = false;
-        $dom_document->validateOnParse     = false;
-        $dom_document->recover             = true;
+        $dom_document->validateOnParse = false;
+        $dom_document->recover = true;
 
         if ($this->xml_mode) {
             $dom_document->loadXML($content, $this->libxml_options);
@@ -410,7 +413,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
             $css_expression = $selector;
         } else {
             $selector_tag_names = array();
-            $selector_result    = self::create($selector);
+            $selector_result = self::create($selector);
             foreach ($selector_result as $node) {
                 $selector_tag_names[] = $node->tagName;
             }
@@ -421,11 +424,11 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         // $css_expression = $this->replaceEqToNthChild($css_expression);
 
         $xpath_expression = CssToXpath::transform($css_expression);
-        $result           = $this->xpath($xpath_expression);
+        $result = $this->xpath($xpath_expression);
 
         if (\is_string($selector)) {
             $result->css_query = $css_expression;
-            $result->selector  = $css_expression; // jquery style
+            $result->selector = $css_expression; // jquery style
         }
 
         if (isset($selector_result)) {
@@ -571,6 +574,26 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         }
 
         return $result;
+    }
+
+    public function first()
+    {
+        return $this->find(':first');
+    }
+
+    public function last()
+    {
+        return $this->find(':last');
+    }
+
+    public function gt(int $idx)
+    {
+        return $this->find(":gt({$idx})");
+    }
+
+    public function lt(int $idx)
+    {
+        return $this->find(":lt({$idx})");
     }
 
     /**
@@ -763,9 +786,24 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
      *
      * @return \DOMDocument
      */
-    public function getDocument()
+    public function getDOMDocument()
     {
         return $this->document;
+    }
+
+    public function getRoot()
+    {
+        $result = $this->createChildInstance();
+
+        if ( ! isset($this->document) || $this->length <= 0) {
+            return $result;
+        }
+
+        foreach ($result->getDOMDocument()->childNodes as $node) {
+            $result->addDomNode($node);
+        }
+
+        return $result;
     }
 
     /**
