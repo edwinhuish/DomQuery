@@ -2,7 +2,7 @@
 
 [English](README.md) | [中文说明](README-ZH.md)
 
-DomQuery是一个PHP库，使您可以轻松地遍历和修改DOM（HTML / XML）。 作为库，它的目标是提供对PHP DOMDocument类的 "仿jQuery" 的访问方式
+DomQuery是一个PHP库，使您可以轻松地遍历和修改DOM（HTML / XML）。 作为库，它的目标是提供对 [PHP DOMDocument 类](http://php.net/manual/en/book.dom.php) 的 "仿jQuery" 的访问方式
 
 ## 安装
 
@@ -122,7 +122,7 @@ DomQuery::create('<a title="hello"></a>')->attr('title') // hello
 - `.wrapAll( [content] )`
 - `.wrapInner( [content] )`
 - `.remove( [selector] )`
-- `.unWrap()`
+- `.unwrap()`
 - `.first()`
 - `.last()`
 - `.gt( int $index )`

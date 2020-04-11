@@ -1289,11 +1289,11 @@ class DomQuery extends DomQueryNodes
 
     /* @noinspection PhpDocMissingThrowsInspection */
     /**
-     * UnWrap HTML structure
+     * Remove the parents of the set of matched elements from the DOM, leaving the matched elements in their place.
      *
-     * @return DomQuery
+     * @return DomQuery Parent node
      */
-    public function unWrap()
+    public function unwrap()
     {
         $result = $this->createChildInstance();
 

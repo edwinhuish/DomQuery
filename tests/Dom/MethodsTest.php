@@ -92,7 +92,7 @@ class MethodsTest extends TestCaseBase
         $dom = new DomQuery('<div class="root"><div class="wrapper"><div id="content"><span>this is a simple text</span><a href="#">link test</a></div></div></div>');
 
         $content = $dom->find('#content');
-        $unWraped = $content->unWrap();
+        $unWraped = $content->unwrap();
 
         $html = $unWraped->getOuterHtml();
 
@@ -112,7 +112,7 @@ class MethodsTest extends TestCaseBase
         $dom = new DomQuery('<div class="root"><div id="wrapper"><div id="content">this is a simple text<a href="#">link test</a></div></div></div>');
 
         $wrapper = $dom->find('#wrapper');
-        $unWraped = $wrapper->unWrap();
+        $unWraped = $wrapper->unwrap();
 
         $html = $unWraped->getOuterHtml();
 
@@ -132,7 +132,7 @@ class MethodsTest extends TestCaseBase
         $dom = new DomQuery('<div class="root"><div id="wrapper"><div id="content">this is a simple text<a href="#">link test</a></div><div class="content2">content2 text</div></div></div>');
 
         $wrapper = $dom->find('#wrapper');
-        $unWraped = $wrapper->unWrap();
+        $unWraped = $wrapper->unwrap();
 
         $html = $unWraped->getOuterHtml();
 
