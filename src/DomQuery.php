@@ -1287,7 +1287,6 @@ class DomQuery extends DomQueryNodes
         return $this;
     }
 
-    /* @noinspection PhpDocMissingThrowsInspection */
     /**
      * Remove the parents of the set of matched elements from the DOM, leaving the matched elements in their place.
      *
@@ -1295,11 +1294,11 @@ class DomQuery extends DomQueryNodes
      */
     public function unwrap()
     {
-        $result = $this->createChildInstance();
-
         if ( ! isset($this->document) || $this->length <= 0) {
-            return $result;
+            return $this;
         }
+
+        $result = $this->createChildInstance();
 
         /** @var \DOMNode $parentNode */
         $parentNode = null;
@@ -1307,12 +1306,12 @@ class DomQuery extends DomQueryNodes
         /** @var \DOMNode $node */
         foreach ($this->nodes as $node) {
 
-            $current = $node;
-
             if ($node instanceof \DOMDocument) {
-                /** @noinspection PhpUnhandledExceptionInspection */
-                throw new \Exception('Can not unWrap the root element '.$current->tagName.' of document');
+                unset($result);
+                return $this;
             }
+
+            $current = $node;
 
             $parentNode = $current->parentNode;
 
