@@ -425,7 +425,7 @@ class DomQuery extends DomQueryNodes
     /**
      * Get the children of each element in the set of matched elements, including text and comment nodes.
      *
-     * @return self
+     * @return $this
      */
     public function contents()
     {
@@ -438,7 +438,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self|callable|\DOMNodeList|\DOMNode|false|null  $selector  expression that filters the set of matched elements
      *
-     * @return self
+     * @return $this
      */
     public function children($selector = null)
     {
@@ -481,7 +481,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self|callable|\DOMNodeList|\DOMNode|null  $selector  expression that filters the set of matched elements
      *
-     * @return self
+     * @return $this
      */
     public function siblings($selector = null)
     {
@@ -511,7 +511,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self|callable|\DOMNodeList|\DOMNode|null  $selector  expression that filters the set of matched elements
      *
-     * @return self
+     * @return $this
      */
     public function parent($selector = null)
     {
@@ -539,7 +539,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self|callable|\DOMNodeList|\DOMNode  $selector  selector expression to match elements against
      *
-     * @return self
+     * @return $this
      */
     public function closest($selector)
     {
@@ -570,7 +570,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self|callable|\DOMNodeList|\DOMNode  $selector
      *
-     * @return self
+     * @return $this
      */
     public function not($selector)
     {
@@ -615,7 +615,7 @@ class DomQuery extends DomQueryNodes
      * @param  string|self|callable|\DOMNodeList|\DOMNode  $selector
      * @param  string|self|\DOMNodeList|\DOMNode|\DOMDocument  $context
      *
-     * @return self
+     * @return $this
      */
     public function add($selector, $context = null)
     {
@@ -644,7 +644,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self|callable|\DOMNodeList|\DOMNode  $selector
      *
-     * @return self
+     * @return $this
      */
     public function filter($selector)
     {
@@ -679,7 +679,7 @@ class DomQuery extends DomQueryNodes
     /**
      * Create a deep copy of the set of matched elements (does not clone attached data).
      *
-     * @return self
+     * @return $this
      */
     public function clone()
     {
@@ -756,7 +756,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self|callable|\DOMNodeList|\DOMNode  $selector
      *
-     * @return self
+     * @return $this
      */
     public function has($selector)
     {
@@ -780,7 +780,7 @@ class DomQuery extends DomQueryNodes
      * @param  integer  $offset
      * @param  integer  $length
      *
-     * @return self
+     * @return $this
      */
     public function slice($offset = 0, $length = null)
     {
@@ -795,7 +795,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  integer  $index
      *
-     * @return self
+     * @return $this
      */
     public function eq($index)
     {
@@ -807,7 +807,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self|callable|\DOMNodeList|\DOMNode|null  $selector  expression that filters the set of matched elements
      *
-     * @return self
+     * @return $this
      */
     public function first($selector = null)
     {
@@ -823,7 +823,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self|callable|\DOMNodeList|\DOMNode|null  $selector  expression that filters the set of matched elements
      *
-     * @return self
+     * @return $this
      */
     public function last($selector = null)
     {
@@ -839,7 +839,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self|callable|\DOMNodeList|\DOMNode|null  $selector  expression that filters the set of matched elements
      *
-     * @return self
+     * @return $this
      */
     public function next($selector = null)
     {
@@ -865,7 +865,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self|callable|\DOMNodeList|\DOMNode|null  $selector  expression that filters the set of matched elements
      *
-     * @return self
+     * @return $this
      */
     public function nextAll($selector = null)
     {
@@ -893,7 +893,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self|callable|\DOMNodeList|\DOMNode|null  $selector  expression that filters the set of matched elements
      *
-     * @return self
+     * @return $this
      */
     public function prev($selector = null)
     {
@@ -919,7 +919,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self|callable|\DOMNodeList|\DOMNode|null  $selector  expression that filters the set of matched elements
      *
-     * @return self
+     * @return $this
      */
     public function prevAll($selector = null)
     {
@@ -948,7 +948,7 @@ class DomQuery extends DomQueryNodes
      * @param  string|self|callable|\DOMNodeList|\DOMNode|null  $selector  expression that
      * filters the set of matched elements to be removed
      *
-     * @return self
+     * @return $this
      */
     public function remove($selector = null)
     {
@@ -1045,7 +1045,7 @@ class DomQuery extends DomQueryNodes
      * @param  string|self  $target
      * @param  string|self|\DOMNodeList|\DOMNode|\DOMDocument  $context
      *
-     * @return self
+     * @return $this
      */
     private function getTargetResult($target, $context = null)
     {
@@ -1078,7 +1078,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self  $target
      *
-     * @return self
+     * @return $this
      */
     public function appendTo($target)
     {
@@ -1116,7 +1116,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self  $target
      *
-     * @return self
+     * @return $this
      */
     public function prependTo($target)
     {
@@ -1178,7 +1178,7 @@ class DomQuery extends DomQueryNodes
      *
      * @param  string|self  $new_content,...
      *
-     * @return self
+     * @return $this
      */
     public function replaceWith()
     {
