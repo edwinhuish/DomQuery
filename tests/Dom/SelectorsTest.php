@@ -490,4 +490,19 @@ class SelectorsTest extends TestCaseBase
         $this->assertEquals(1, $dom->find(':root')->length);
     }
 
+    public function testFirstLastPseudoSelector()
+    {
+        $dom = new DomQuery('<ul>
+            <li>list item 1</li>
+            <li>list item 2</li>
+            <li>list item 3</li>
+            <li>list item 4</li>
+            <li>list item 5</li>
+            <li>list item 6</li>
+        </ul>');
+
+        $this->assertEquals('list item 1', $dom->find('li:first')->text);
+        $this->assertEquals('<li>list item 6</li>', $dom->find('li:last')->outerHTML);
+    }
+
 }
