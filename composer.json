@@ -18,7 +18,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "DQTests\\": "tests"
+      "DQ\\Tests\\": "tests"
     }
   },
   "scripts": {
