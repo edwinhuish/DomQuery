@@ -103,6 +103,25 @@ class DomQuery extends DomQueryNodes
     }
 
     /**
+     * @return \Tightenco\Collect\Support\Collection
+     */
+    public function getAttributes()
+    {
+        $attrs = [];
+
+        if ($node = $this->getFirstElmNode()) {
+            if ($node instanceof \DOMElement ) {
+                /* @var \DOMNode $attr */
+                foreach ($node->attributes as $attr){
+                    $attrs[$attr->nodeName] = $attr->nodeValue;
+                }
+            }
+        }
+
+        return collect($attrs);
+    }
+
+    /**
      * Store arbitrary data associated with the matched elements or return the value at
      * the named data store for the first element in the set of matched elements.
      *
