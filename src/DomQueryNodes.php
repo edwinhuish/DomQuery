@@ -352,7 +352,7 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
     public function loadContent(string $content, $encoding = 'UTF-8')
     {
 
-        if (static::$autoEncoding) {
+        if (static::$autoEncoding !== false) {
             $content = $this->to_encoding($content, $encoding);
         }
 
