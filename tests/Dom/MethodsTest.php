@@ -147,4 +147,20 @@ class MethodsTest extends TestCaseBase
 
     }
 
+    public function testGetAttributes()
+    {
+        $html = '<item name="TestItem" value="default" index="33" data-key="v011" />';
+
+        $dom = new DomQuery($html);
+        $items = $dom->find('item');
+        $attrs = $items->getAttributes();
+
+        $this->assertEquals([
+            'name' => 'TestItem',
+            'value' => 'default',
+            'index' => '33',
+            'data-key' => 'v011',
+        ], $attrs->toArray());
+    }
+
 }
