@@ -404,6 +404,18 @@ abstract class DomQueryNodes implements \Countable, \IteratorAggregate, \ArrayAc
         return $this;
     }
 
+    public function loadXmlContent(string $content, $encoding = 'UTF-8')
+    {
+        $this->xml_mode = true;
+        return $this->loadContent($content, $encoding);
+    }
+
+    public function loadHtmlContent(string $content, $encoding = 'UTF-8')
+    {
+        $this->xml_mode = false;
+        return $this->loadContent($content, $encoding);
+    }
+
     /**
      * Grants access to the DOM nodes of this instance
      *
